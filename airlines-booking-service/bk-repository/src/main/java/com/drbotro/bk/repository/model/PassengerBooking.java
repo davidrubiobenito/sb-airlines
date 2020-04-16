@@ -1,60 +1,49 @@
 package com.drbotro.bk.repository.model;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.Table;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 import com.drbotro.bk.common.model.AbstractModelBean;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name = "passenger_booking")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class Passenger extends AbstractModelBean{
+public class PassengerBooking extends AbstractModelBean{
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "passenger_id")
-    private long id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private long passengerId;
 
-    @Column(name = "first_name")
     private String firstName;
-    @Column(name = "last_name")
     private String lastName;
-    @Column(name = "gender")
     private String gender;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToOne
     @JoinColumn(name = "booking_record_id")
-    @JsonIgnore
-    private BookingRecord bookingRecord;
+    private BookingRecordBooking bookingRecord;
 
-    private Passenger(PassengerBuilder builder){
-        this.id = builder.id;
+    private PassengerBooking(PassengerBuilder builder){
+        this.passengerId = builder.passengerId;
         this.firstName = builder.firstName;
         this.lastName = builder.lastName;
         this.gender = builder.gender;
         this.bookingRecord = builder.bookingRecord;
     }
 
-    public Long getId(){
-        return id;
+    public Long getPassengerId(){
+        return passengerId;
     }
 
     public String getFirstName(){
@@ -69,25 +58,25 @@ public class Passenger extends AbstractModelBean{
         return gender;
     }
 
-    public BookingRecord getBookingRecord(){
+    public BookingRecordBooking getBookingRecord(){
         return bookingRecord;
     }
 
     @Override
     public boolean equals(Object other){
-        if(!(other instanceof Passenger)){
+        if(!(other instanceof PassengerBooking)){
             return false;
         }
-        final Passenger castOther = (Passenger) other;
-        return new EqualsBuilder().append(id, castOther.id).append(firstName, castOther.firstName)
+        final PassengerBooking castOther = (PassengerBooking) other;
+        return new EqualsBuilder().append(passengerId, castOther.passengerId).append(firstName, castOther.firstName)
                 .append(lastName, castOther.lastName).append(gender, castOther.gender)
                 .append(bookingRecord, castOther.bookingRecord).isEquals();
     }
 
     @Override
     public int hashCode(){
-        return new HashCodeBuilder().append(id).append(firstName).append(lastName).append(gender).append(bookingRecord)
-                .toHashCode();
+        return new HashCodeBuilder().append(passengerId).append(firstName).append(lastName).append(gender)
+                .append(bookingRecord).toHashCode();
     }
 
     public static PassengerBuilder builder(){
@@ -95,24 +84,24 @@ public class Passenger extends AbstractModelBean{
     }
 
     public PassengerBuilder cloneBuilder(){
-        return new PassengerBuilder().withId(this.id).withFirstname(this.firstName).withLastName(this.lastName)
-                .withGender(this.gender).withBookingRecord(this.bookingRecord);
+        return new PassengerBuilder().withPassengerId(this.passengerId).withFirstname(this.firstName)
+                .withLastName(this.lastName).withGender(this.gender).withBookingRecord(this.bookingRecord);
     }
 
     public interface IPassengerBuilder{
-        Passenger build();
+        PassengerBooking build();
     }
 
     public static final class PassengerBuilder implements IPassengerBuilder{
 
-        private long id;
+        private long passengerId;
         private String firstName;
         private String lastName;
         private String gender;
-        private BookingRecord bookingRecord;
+        private BookingRecordBooking bookingRecord;
 
-        public PassengerBuilder withId(long id){
-            this.id = id;
+        public PassengerBuilder withPassengerId(long passengerId){
+            this.passengerId = passengerId;
             return self();
         }
 
@@ -131,14 +120,14 @@ public class Passenger extends AbstractModelBean{
             return self();
         }
 
-        public PassengerBuilder withBookingRecord(BookingRecord bookingRecord){
+        public PassengerBuilder withBookingRecord(BookingRecordBooking bookingRecord){
             this.bookingRecord = bookingRecord;
             return self();
         }
 
         @Override
-        public Passenger build(){
-            return new Passenger(this);
+        public PassengerBooking build(){
+            return new PassengerBooking(this);
         }
 
         private PassengerBuilder self(){

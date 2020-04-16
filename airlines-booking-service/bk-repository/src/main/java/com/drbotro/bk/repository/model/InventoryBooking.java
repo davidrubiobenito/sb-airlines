@@ -21,7 +21,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class Inventory extends AbstractModelBean{
+public class InventoryBooking extends AbstractModelBean{
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -35,7 +35,7 @@ public class Inventory extends AbstractModelBean{
     @Column(name = "available")
     private int available;
 
-    private Inventory(InventoryBuilder builder){
+    private InventoryBooking(InventoryBuilder builder){
         this.id = builder.id;
         this.flightNumber = builder.flightNumber;
         this.flightDate = builder.flightDate;
@@ -68,10 +68,10 @@ public class Inventory extends AbstractModelBean{
 
     @Override
     public boolean equals(Object other){
-        if(!(other instanceof Inventory)){
+        if(!(other instanceof InventoryBooking)){
             return false;
         }
-        final Inventory castOther = (Inventory) other;
+        final InventoryBooking castOther = (InventoryBooking) other;
         return new EqualsBuilder().append(id, castOther.id).append(flightNumber, castOther.flightNumber)
                 .append(flightDate, castOther.flightDate).append(available, castOther.available).isEquals();
     }
@@ -91,7 +91,7 @@ public class Inventory extends AbstractModelBean{
     }
 
     public interface IInventoryBuilder{
-        Inventory build();
+        InventoryBooking build();
     }
 
     public static final class InventoryBuilder implements IInventoryBuilder{
@@ -122,8 +122,8 @@ public class Inventory extends AbstractModelBean{
         }
 
         @Override
-        public Inventory build(){
-            return new Inventory(this);
+        public InventoryBooking build(){
+            return new InventoryBooking(this);
         }
 
         private InventoryBuilder self(){

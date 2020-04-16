@@ -2,60 +2,50 @@ package com.drbotro.bk.repository.model;
 
 import java.util.Collections;
 import java.util.Date;
-import java.util.Set;
+import java.util.List;
 
 import javax.persistence.CascadeType;
-import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
-import javax.persistence.Table;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 import com.drbotro.bk.common.model.AbstractModelBean;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name = "booking_record_booking")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class BookingRecord extends AbstractModelBean{
+public class BookingRecordBooking extends AbstractModelBean{
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "booking_record_id")
-    private long id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private long bookingRecordId;
 
-    @Column(name = "flight_number")
     private String flightNumber;
-    @Column(name = "origin")
     private String origin;
-    @Column(name = "destination")
     private String destination;
-    @Column(name = "flight_date")
     private String flightDate;
-    @Column(name = "booking_date")
     private Date bookingDate;
-    @Column(name = "fare")
     private String fare;
-    @Column(name = "status")
     private String status;
 
-    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "bookingRecord")
-    @Column(name = "passengers")
-    private Set<Passenger> passengers;
+    //@OneToMany(cascade = CascadeType.ALL, mappedBy = "bookingRecord", orphanRemoval = true)
+    @OneToMany(mappedBy = "bookingRecord", cascade = CascadeType.ALL)
+    @JsonIgnore
+    private List<PassengerBooking> passengers;
 
-    private BookingRecord(BookingRecordBuilder builder){
-        this.id = builder.id;
+    private BookingRecordBooking(BookingRecordBuilder builder){
+        this.bookingRecordId = builder.bookingRecordId;
         this.flightNumber = builder.flightNumber;
         this.origin = builder.origin;
         this.destination = builder.destination;
@@ -66,8 +56,8 @@ public class BookingRecord extends AbstractModelBean{
         this.passengers = builder.passengers;
     }
 
-    public long getId(){
-        return id;
+    public long getBookingRecordId(){
+        return bookingRecordId;
     }
 
     public String getFlightNumber(){
@@ -98,26 +88,26 @@ public class BookingRecord extends AbstractModelBean{
         return status;
     }
 
-    public Set<Passenger> getPassengers(){
+    public List<PassengerBooking> getPassengers(){
         return passengers;
     }
 
     @Override
     public boolean equals(Object other){
-        if(!(other instanceof BookingRecord)){
+        if(!(other instanceof BookingRecordBooking)){
             return false;
         }
-        final BookingRecord castOther = (BookingRecord) other;
-        return new EqualsBuilder().append(id, castOther.id).append(flightNumber, castOther.flightNumber)
-                .append(origin, castOther.origin).append(destination, castOther.destination)
-                .append(flightDate, castOther.flightDate).append(bookingDate, castOther.bookingDate)
-                .append(fare, castOther.fare).append(status, castOther.status).append(passengers, castOther.passengers)
-                .isEquals();
+        final BookingRecordBooking castOther = (BookingRecordBooking) other;
+        return new EqualsBuilder().append(bookingRecordId, castOther.bookingRecordId)
+                .append(flightNumber, castOther.flightNumber).append(origin, castOther.origin)
+                .append(destination, castOther.destination).append(flightDate, castOther.flightDate)
+                .append(bookingDate, castOther.bookingDate).append(fare, castOther.fare)
+                .append(status, castOther.status).append(passengers, castOther.passengers).isEquals();
     }
 
     @Override
     public int hashCode(){
-        return new HashCodeBuilder().append(id).append(flightNumber).append(origin).append(destination)
+        return new HashCodeBuilder().append(bookingRecordId).append(flightNumber).append(origin).append(destination)
                 .append(flightDate).append(bookingDate).append(fare).append(status).append(passengers).toHashCode();
     }
 
@@ -126,18 +116,19 @@ public class BookingRecord extends AbstractModelBean{
     }
 
     public BookingRecordBuilder cloneBuilder(){
-        return new BookingRecordBuilder().withId(this.id).withFlightNumber(this.flightNumber).withOrigin(this.origin)
-                .withDestination(this.destination).withFlightDate(this.flightDate).withBookingDate(this.bookingDate)
-                .withFare(this.fare).withStatus(this.status).withPassengers(this.passengers);
+        return new BookingRecordBuilder().withBookingRecordId(this.bookingRecordId).withFlightNumber(this.flightNumber)
+                .withOrigin(this.origin).withDestination(this.destination).withFlightDate(this.flightDate)
+                .withBookingDate(this.bookingDate).withFare(this.fare).withStatus(this.status)
+                .withPassengers(this.passengers);
     }
 
     public interface IBookingRecordBuilder{
-        BookingRecord build();
+        BookingRecordBooking build();
     }
 
     public static final class BookingRecordBuilder implements IBookingRecordBuilder{
 
-        private long id;
+        private long bookingRecordId;
         private String flightNumber;
         private String origin;
         private String destination;
@@ -145,13 +136,13 @@ public class BookingRecord extends AbstractModelBean{
         private Date bookingDate;
         private String fare;
         private String status;
-        private Set<Passenger> passengers = Collections.emptySet();
+        private List<PassengerBooking> passengers = Collections.emptyList();
 
         private BookingRecordBuilder(){
         }
 
-        public BookingRecordBuilder withId(long id){
-            this.id = id;
+        public BookingRecordBuilder withBookingRecordId(long bookingRecordId){
+            this.bookingRecordId = bookingRecordId;
             return self();
         }
 
@@ -190,14 +181,14 @@ public class BookingRecord extends AbstractModelBean{
             return self();
         }
 
-        public BookingRecordBuilder withPassengers(Set<Passenger> passengers){
+        public BookingRecordBuilder withPassengers(List<PassengerBooking> passengers){
             this.passengers = passengers;
             return self();
         }
 
         @Override
-        public BookingRecord build(){
-            return new BookingRecord(this);
+        public BookingRecordBooking build(){
+            return new BookingRecordBooking(this);
         }
 
         private BookingRecordBuilder self(){
