@@ -5,20 +5,20 @@ import org.springframework.stereotype.Component;
 
 import com.drbotro.bk.common.converter.Converter;
 import com.drbotro.bk.coreserviceapi.data.PassengerResponse;
-import com.drbotro.bk.repository.model.Passenger;
+import com.drbotro.bk.repository.model.PassengerBooking;
 
 @Component
-public class PassengerIntoPassengerResponseConverter implements Converter<Passenger, PassengerResponse>{
+public class PassengerIntoPassengerResponseConverter implements Converter<PassengerBooking, PassengerResponse>{
 
     @Autowired
     private BookingRecordIntoBookingRecordResponseConverter bookingRecordResponseConverter;
 
     @Override
-    public PassengerResponse convert(Passenger passenger){
+    public PassengerResponse convert(final PassengerBooking passenger){
         if(passenger == null){
             return null;
         }
-        return PassengerResponse.builder().withId(passenger.getId()).withFirstname(passenger.getFirstName())
+        return PassengerResponse.builder().withId(passenger.getPassengerId()).withFirstname(passenger.getFirstName())
                 .withLastName(passenger.getLastName()).withGender(passenger.getGender())
                 .withBookingRecordResponse(bookingRecordResponseConverter.convert(passenger.getBookingRecord()))
                 .build();

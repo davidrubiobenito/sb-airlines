@@ -2,7 +2,7 @@ package com.drbotro.bk.webapi.response;
 
 import java.util.Collections;
 import java.util.Date;
-import java.util.Set;
+import java.util.List;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
@@ -27,7 +27,7 @@ public class BookingRecordWebResponse extends AbstractModelBean{
     private String fare;
     private String status;
 
-    private Set<PassengerWebResponse> passengersWebResponse;
+    private List<PassengerWebResponse> passengersWebResponse;
 
     private BookingRecordWebResponse(BookingRecordWebResponseBuilder builder){
         this.id = builder.id;
@@ -73,7 +73,7 @@ public class BookingRecordWebResponse extends AbstractModelBean{
         return status;
     }
 
-    public Set<PassengerWebResponse> getPassengersWebResponse(){
+    public List<PassengerWebResponse> getPassengersWebResponse(){
         return passengersWebResponse;
     }
 
@@ -122,7 +122,7 @@ public class BookingRecordWebResponse extends AbstractModelBean{
         private Date bookingDate;
         private String fare;
         private String status;
-        private Set<PassengerWebResponse> passengersWebResponse = Collections.emptySet();
+        private List<PassengerWebResponse> passengersWebResponse = Collections.emptyList();
 
         private BookingRecordWebResponseBuilder(){
         }
@@ -168,7 +168,7 @@ public class BookingRecordWebResponse extends AbstractModelBean{
         }
 
         public BookingRecordWebResponseBuilder withPassengersWebResponse(
-                Set<PassengerWebResponse> passengersWebResponse){
+                List<PassengerWebResponse> passengersWebResponse){
             this.passengersWebResponse = passengersWebResponse;
             return self();
         }

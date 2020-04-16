@@ -17,7 +17,7 @@ public class BookingRecordResponseIntoBookingRecordWebResponseConverter
     private PassengerResponseIntoPassengerWebResponseConverter passengerWebResposeConverter;
 
     @Override
-    public BookingRecordWebResponse convert(BookingRecordResponse bookingRecordResponse){
+    public BookingRecordWebResponse convert(final BookingRecordResponse bookingRecordResponse){
         if(bookingRecordResponse == null){
             return null;
         }
@@ -35,7 +35,7 @@ public class BookingRecordResponseIntoBookingRecordWebResponseConverter
                 .withStatus(bookingRecordResponse.getStatus())
                 .withPassengersWebResponse(bookingRecordResponse.getPassengersResponse().stream()
                         .map(passengerResponse -> passengerWebResposeConverter.convert(passengerResponse))
-                        .collect(Collectors.toSet()))
+                        .collect(Collectors.toList()))
                 .build();
 
     }

@@ -1,10 +1,5 @@
 package com.drbotro.bk.webrs;
 
-import java.util.Arrays;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.Set;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.CommandLineRunner;
@@ -16,12 +11,8 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.web.client.RestTemplate;
 
-import com.drbotro.bk.coreserviceapi.data.BookingRecordRequest;
-import com.drbotro.bk.coreserviceapi.data.BookingRecordResponse;
-import com.drbotro.bk.coreserviceapi.data.PassengerRequest;
 import com.drbotro.bk.coreserviceapi.inter.IBookingService;
 import com.drbotro.bk.repository.dao.IInventoryRepository;
-import com.drbotro.bk.repository.model.Inventory;
 
 @SpringBootApplication
 @ComponentScan(basePackages = {"com.drbotro.*"})
@@ -45,61 +36,45 @@ public class WebRSApplication{
         return (args) -> {
 
             /*
-            List<Inventory> inventoryList = new ArrayList<>();
-            inventoryList.add(Inventory.builder().withFlightNumber("BF100").withFlightDate("22-JAN-16")
+            List<InventoryBooking> inventoryList = new ArrayList<>();
+            inventoryList.add(InventoryBooking.builder().withFlightNumber("BF100").withFlightDate("22-JAN-16")
                     .withAvailable(100).build());
-            inventoryList.add(Inventory.builder().withFlightNumber("BF101").withFlightDate("22-JAN-16")
+            inventoryList.add(InventoryBooking.builder().withFlightNumber("BF101").withFlightDate("22-JAN-16")
                     .withAvailable(100).build());
-            inventoryList.add(Inventory.builder().withFlightNumber("BF102").withFlightDate("22-JAN-16")
+            inventoryList.add(InventoryBooking.builder().withFlightNumber("BF102").withFlightDate("22-JAN-16")
                     .withAvailable(100).build());
-            inventoryList.add(Inventory.builder().withFlightNumber("BF103").withFlightDate("22-JAN-16")
+            inventoryList.add(InventoryBooking.builder().withFlightNumber("BF103").withFlightDate("22-JAN-16")
                     .withAvailable(100).build());
-            inventoryList.add(Inventory.builder().withFlightNumber("BF104").withFlightDate("22-JAN-16")
+            inventoryList.add(InventoryBooking.builder().withFlightNumber("BF104").withFlightDate("22-JAN-16")
                     .withAvailable(100).build());
-            inventoryList.add(Inventory.builder().withFlightNumber("BF105").withFlightDate("22-JAN-16")
+            inventoryList.add(InventoryBooking.builder().withFlightNumber("BF105").withFlightDate("22-JAN-16")
                     .withAvailable(100).build());
-            inventoryList.add(Inventory.builder().withFlightNumber("BF106").withFlightDate("22-JAN-16")
+            inventoryList.add(InventoryBooking.builder().withFlightNumber("BF106").withFlightDate("22-JAN-16")
                     .withAvailable(100).build());
             
-            inventoryList.stream().map(inv -> iInventoryRepository.save(inv));
-               */
+            inventoryList.forEach(inv -> iInventoryRepository.save(inv));
+            */
 
-            Inventory[] invs = {
-                    Inventory.builder().withFlightNumber("BF100").withFlightDate("22-JAN-16").withAvailable(100)
-                            .build(),
-                    Inventory.builder().withFlightNumber("BF101").withFlightDate("22-JAN-16").withAvailable(100)
-                            .build(),
-                    Inventory.builder().withFlightNumber("BF102").withFlightDate("22-JAN-16").withAvailable(100)
-                            .build(),
-                    Inventory.builder().withFlightNumber("BF103").withFlightDate("22-JAN-16").withAvailable(100)
-                            .build(),
-                    Inventory.builder().withFlightNumber("BF104").withFlightDate("22-JAN-16").withAvailable(100)
-                            .build(),
-                    Inventory.builder().withFlightNumber("BF105").withFlightDate("22-JAN-16").withAvailable(100)
-                            .build(),
-                    Inventory.builder().withFlightNumber("BF106").withFlightDate("22-JAN-16").withAvailable(100)
-                            .build()};
-
-            Arrays.asList(invs).forEach(inventory -> iInventoryRepository.save(inventory));
-
+            /*
             BookingRecordRequest bookingRecordRequest = BookingRecordRequest.builder().withFlightNumber("BF101")
                     .withOrigin("NYC").withDestination("SFO").withFlightDate("22-JAN-16").withBookingDate(new Date())
                     .withFare("101").build();
-            Set<PassengerRequest> passengersRequest = new HashSet<>();
+            List<PassengerRequest> passengersRequest = new ArrayList<>();
             passengersRequest.add(PassengerRequest.builder().withFirstname("Gean").withLastName("Franc")
                     .withGender("Male").withBookingRecordRequest(bookingRecordRequest).build());
-
+            
             BookingRecordRequest bookingRecordRequestAux = bookingRecordRequest.cloneBuilder()
                     .withPassengersRequest(passengersRequest).build();
-
+            
             logger.info("Booking Request to save ...: {} ", bookingRecordRequestAux);
             BookingRecordResponse bookingRecordResponse = iBookingService.saveBookingRecord(bookingRecordRequestAux);
-
+            
             logger.info("Booking successfully saved...: {} ", bookingRecordResponse);
-
+            
             logger.info("Looking to load booking record...");
-
+            
             logger.info("Result: {}", iBookingService.getBookingRecordById(bookingRecordResponse.getId()));
+            */
         };
     }
 }

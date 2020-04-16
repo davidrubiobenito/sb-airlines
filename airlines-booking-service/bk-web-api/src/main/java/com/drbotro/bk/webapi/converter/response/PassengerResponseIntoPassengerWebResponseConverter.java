@@ -15,7 +15,7 @@ public class PassengerResponseIntoPassengerWebResponseConverter
     private BookingRecordResponseIntoBookingRecordWebResponseConverter bookingRecordWebResponseConverter;
 
     @Override
-    public PassengerWebResponse convert(PassengerResponse passengerResponse){
+    public PassengerWebResponse convert(final PassengerResponse passengerResponse){
         if(passengerResponse == null){
             return null;
         }

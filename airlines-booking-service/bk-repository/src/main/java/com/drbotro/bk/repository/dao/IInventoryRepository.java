@@ -4,10 +4,10 @@ import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import com.drbotro.bk.repository.model.Inventory;
+import com.drbotro.bk.repository.model.InventoryBooking;
 
-public interface IInventoryRepository extends JpaRepository<Inventory, Long>{
+public interface IInventoryRepository extends JpaRepository<InventoryBooking, Long>{
 
-    Optional<Inventory> findByFlightNumberAndFlightDate(String flightNumber, String flightDate);
+    Optional<InventoryBooking> findByFlightNumberAndFlightDate(String flightNumber, String flightDate);
 
 }

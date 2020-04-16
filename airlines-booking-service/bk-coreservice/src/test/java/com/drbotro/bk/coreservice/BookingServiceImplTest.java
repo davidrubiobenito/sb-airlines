@@ -6,10 +6,10 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.when;
 
+import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashSet;
+import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -29,9 +29,9 @@ import com.drbotro.bk.coreserviceapi.data.PassengerRequest;
 import com.drbotro.bk.coreserviceapi.data.PassengerResponse;
 import com.drbotro.bk.repository.dao.IBookingRepository;
 import com.drbotro.bk.repository.dao.IInventoryRepository;
-import com.drbotro.bk.repository.model.BookingRecord;
-import com.drbotro.bk.repository.model.Inventory;
-import com.drbotro.bk.repository.model.Passenger;
+import com.drbotro.bk.repository.model.BookingRecordBooking;
+import com.drbotro.bk.repository.model.InventoryBooking;
+import com.drbotro.bk.repository.model.PassengerBooking;
 
 public class BookingServiceImplTest{
 
@@ -53,23 +53,23 @@ public class BookingServiceImplTest{
     private FareWebResponse fareWebResponse = FareWebResponse.builder().withFlightNumber(FLIGHT_NUMBER)
             .withFlightDate(FLIGHT_DATE).withFare(FARE).build();
 
-    private Inventory inventory = Inventory.builder().withFlightNumber(FLIGHT_NUMBER).withFlightDate(FLIGHT_DATE)
-            .withAvailable(AVAILABLE).build();
+    private InventoryBooking inventory = InventoryBooking.builder().withFlightNumber(FLIGHT_NUMBER)
+            .withFlightDate(FLIGHT_DATE).withAvailable(AVAILABLE).build();
 
     private PassengerRequest passengersRequest;
-    private Set<PassengerRequest> passengersRequestSet = new HashSet<PassengerRequest>();
+    private List<PassengerRequest> passengersRequestList = new ArrayList<PassengerRequest>();
     private BookingRecordRequest bookingRecordRequest = BookingRecordRequest.builder().withFlightNumber(FLIGHT_NUMBER)
             .withOrigin(ORIGIN).withDestination(DESTINATION).withFlightDate(FLIGHT_DATE).withBookingDate(BOOKING_DATE)
             .withFare(FARE).withStatus(STATUS).build();
 
-    private Passenger passengers;
-    private Set<Passenger> passengersSet = new HashSet<Passenger>();
-    private BookingRecord bookingRecord = BookingRecord.builder().withFlightNumber(FLIGHT_NUMBER).withOrigin(ORIGIN)
-            .withDestination(DESTINATION).withFlightDate(FLIGHT_DATE).withBookingDate(BOOKING_DATE).withFare(FARE)
-            .withStatus(STATUS).build();
+    private PassengerBooking passengers;
+    private List<PassengerBooking> passengersList = new ArrayList<PassengerBooking>();
+    private BookingRecordBooking bookingRecord = BookingRecordBooking.builder().withFlightNumber(FLIGHT_NUMBER)
+            .withOrigin(ORIGIN).withDestination(DESTINATION).withFlightDate(FLIGHT_DATE).withBookingDate(BOOKING_DATE)
+            .withFare(FARE).withStatus(STATUS).build();
 
     private PassengerResponse passengersResponse;
-    private Set<PassengerResponse> passengersResponseSet = new HashSet<PassengerResponse>();
+    private List<PassengerResponse> passengersResponseList = new ArrayList<PassengerResponse>();
     private BookingRecordResponse bookingRecordResponse = BookingRecordResponse.builder()
             .withFlightNumber(FLIGHT_NUMBER).withOrigin(ORIGIN).withDestination(DESTINATION).withFlightDate(FLIGHT_DATE)
             .withBookingDate(BOOKING_DATE).withFare(FARE).withStatus(STATUS).build();
@@ -78,7 +78,7 @@ public class BookingServiceImplTest{
     private RestTemplate restTemplate;
 
     @Mock
-    private BookingRecord bookingRecordMock;
+    private BookingRecordBooking bookingRecordMock;
 
     @Mock
     private IBookingRepository iBookingRepository;
@@ -99,18 +99,18 @@ public class BookingServiceImplTest{
 
         passengersRequest = PassengerRequest.builder().withFirstname(FIRST_NAME_P1).withLastName(LAST_NAME_P1)
                 .withGender(GENDER_P1).withBookingRecordRequest(bookingRecordRequest).build();
-        passengersRequestSet.add(passengersRequest);
-        bookingRecordRequest = bookingRecordRequest.cloneBuilder().withPassengersRequest(passengersRequestSet).build();
+        passengersRequestList.add(passengersRequest);
+        bookingRecordRequest = bookingRecordRequest.cloneBuilder().withPassengersRequest(passengersRequestList).build();
 
-        passengers = Passenger.builder().withFirstname(FIRST_NAME_P1).withLastName(LAST_NAME_P1).withGender(GENDER_P1)
-                .withBookingRecord(bookingRecord).build();
-        passengersSet.add(passengers);
-        bookingRecord = bookingRecord.cloneBuilder().withPassengers(passengersSet).build();
+        passengers = PassengerBooking.builder().withFirstname(FIRST_NAME_P1).withLastName(LAST_NAME_P1)
+                .withGender(GENDER_P1).withBookingRecord(bookingRecord).build();
+        passengersList.add(passengers);
+        bookingRecord = bookingRecord.cloneBuilder().withPassengers(passengersList).build();
 
         passengersResponse = PassengerResponse.builder().withFirstname(FIRST_NAME_P1).withLastName(LAST_NAME_P1)
                 .withGender(GENDER_P1).withBookingRecordResponse(bookingRecordResponse).build();
-        passengersResponseSet.add(passengersResponse);
-        bookingRecordResponse = bookingRecordResponse.cloneBuilder().withPassengersResponse(passengersResponseSet)
+        passengersResponseList.add(passengersResponse);
+        bookingRecordResponse = bookingRecordResponse.cloneBuilder().withPassengersResponse(passengersResponseList)
                 .build();
     }
 
@@ -120,11 +120,11 @@ public class BookingServiceImplTest{
                 + "&flightDate=" + bookingRecordRequest.getFlightDate(), FareWebResponse.class))
                         .thenReturn(fareWebResponse);
 
-        Optional<Inventory> inventoryOptional = Optional.of(inventory);
+        Optional<InventoryBooking> inventoryOptional = Optional.of(inventory);
         when(iInventoryRepository.findByFlightNumberAndFlightDate(bookingRecordRequest.getFlightNumber(),
                 bookingRecordRequest.getFlightDate())).thenReturn(inventoryOptional);
 
-        Inventory inventoryAux = inventory.cloneBuilder()
+        InventoryBooking inventoryAux = inventory.cloneBuilder()
                 .withAvailable(AVAILABLE - bookingRecordRequest.getPassengersRequest().size()).build();
         when(iInventoryRepository.saveAndFlush(inventoryAux)).thenReturn(inventoryAux);
 
@@ -137,7 +137,7 @@ public class BookingServiceImplTest{
 
     @Test
     public void whenIdBookingRecord_shouldReturn_bookingRecordResponse(){
-        Optional<BookingRecord> bookingRecordOptional = Optional.of(bookingRecord);
+        Optional<BookingRecordBooking> bookingRecordOptional = Optional.of(bookingRecord);
         when(iBookingRepository.findById(anyLong())).thenReturn(bookingRecordOptional);
         when(bookingRecordResponseConverter.convert(bookingRecord)).thenReturn(bookingRecordResponse);
 
@@ -146,7 +146,7 @@ public class BookingServiceImplTest{
 
     @Test
     public void whenIdBoogingRecordNotExist_shouldReturn_Null(){
-        Optional<BookingRecord> bookingRecordOptional = Optional.empty();
+        Optional<BookingRecordBooking> bookingRecordOptional = Optional.empty();
         when(iBookingRepository.findById(anyLong())).thenReturn(bookingRecordOptional);
         when(bookingRecordResponseConverter.convert(null)).thenReturn(null);
 
@@ -157,7 +157,7 @@ public class BookingServiceImplTest{
     public void whenStatusAndIdBookingRecord_shouldReturn_updateBookingRecordResponse(){
         BookingRecordResponse bookingRecordResponseUpdated = bookingRecordResponse.cloneBuilder()
                 .withStatus(BookingStatus.CHECKED_IN).build();
-        Optional<BookingRecord> bookingRecordOptional = Optional.of(bookingRecord);
+        Optional<BookingRecordBooking> bookingRecordOptional = Optional.of(bookingRecord);
         when(iBookingRepository.findById(anyLong())).thenReturn(bookingRecordOptional);
         bookingRecord = bookingRecord.cloneBuilder().withStatus(BookingStatus.CHECKED_IN).build();
         when(bookingRecordResponseConverter.convert(bookingRecord)).thenReturn(bookingRecordResponseUpdated);
@@ -168,7 +168,7 @@ public class BookingServiceImplTest{
 
     @Test
     public void whenStatudAndIdBoogingRecordNotExist_shouldReturn_Null(){
-        Optional<BookingRecord> bookingRecordOptional = Optional.empty();
+        Optional<BookingRecordBooking> bookingRecordOptional = Optional.empty();
         when(iBookingRepository.findById(anyLong())).thenReturn(bookingRecordOptional);
         when(bookingRecordResponseConverter.convert(null)).thenReturn(null);
 

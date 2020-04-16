@@ -7,16 +7,17 @@ import org.springframework.stereotype.Component;
 
 import com.drbotro.bk.common.converter.Converter;
 import com.drbotro.bk.coreserviceapi.data.BookingRecordResponse;
-import com.drbotro.bk.repository.model.BookingRecord;
+import com.drbotro.bk.repository.model.BookingRecordBooking;
 
 @Component
-public class BookingRecordIntoBookingRecordResponseConverter implements Converter<BookingRecord, BookingRecordResponse>{
+public class BookingRecordIntoBookingRecordResponseConverter
+        implements Converter<BookingRecordBooking, BookingRecordResponse>{
 
     @Autowired
     private PassengerIntoPassengerResponseConverter passengerResposeConverter;
 
     @Override
-    public BookingRecordResponse convert(BookingRecord bookingRecord){
+    public BookingRecordResponse convert(final BookingRecordBooking bookingRecord){
         if(bookingRecord == null){
             return null;
         }
@@ -26,13 +27,13 @@ public class BookingRecordIntoBookingRecordResponseConverter implements Converte
                 .collect(Collectors.toSet());
                 */
 
-        return BookingRecordResponse.builder().withId(bookingRecord.getId())
+        return BookingRecordResponse.builder().withId(bookingRecord.getBookingRecordId())
                 .withFlightNumber(bookingRecord.getFlightNumber()).withOrigin(bookingRecord.getOrigin())
                 .withDestination(bookingRecord.getDestination()).withFlightDate(bookingRecord.getFlightDate())
                 .withBookingDate(bookingRecord.getBookingDate()).withFare(bookingRecord.getFare())
                 .withStatus(bookingRecord.getStatus())
                 .withPassengersResponse(bookingRecord.getPassengers().stream()
-                        .map(passenger -> passengerResposeConverter.convert(passenger)).collect(Collectors.toSet()))
+                        .map(passenger -> passengerResposeConverter.convert(passenger)).collect(Collectors.toList()))
                 .build();
 
     }

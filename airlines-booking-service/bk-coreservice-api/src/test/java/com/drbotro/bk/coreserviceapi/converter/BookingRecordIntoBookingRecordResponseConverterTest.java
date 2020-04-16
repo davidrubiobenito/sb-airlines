@@ -5,9 +5,9 @@ import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.mockito.Mockito.when;
 
+import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.List;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -18,8 +18,8 @@ import org.mockito.MockitoAnnotations;
 import com.drbotro.bk.coreserviceapi.data.BookingRecordResponse;
 import com.drbotro.bk.coreserviceapi.data.BookingStatus;
 import com.drbotro.bk.coreserviceapi.data.PassengerResponse;
-import com.drbotro.bk.repository.model.BookingRecord;
-import com.drbotro.bk.repository.model.Passenger;
+import com.drbotro.bk.repository.model.BookingRecordBooking;
+import com.drbotro.bk.repository.model.PassengerBooking;
 
 public class BookingRecordIntoBookingRecordResponseConverterTest{
 
@@ -35,14 +35,14 @@ public class BookingRecordIntoBookingRecordResponseConverterTest{
     private static final String FARE = "101";
     private static final String STATUS = BookingStatus.BOOKING_CONFIRMED;
 
-    private Passenger passengers;
-    private Set<Passenger> passengersSet = new HashSet<Passenger>();
-    private BookingRecord bookingRecord = BookingRecord.builder().withFlightNumber(FLIGHT_NUMBER).withOrigin(ORIGIN)
-            .withDestination(DESTINATION).withFlightDate(FLIGHT_DATE).withBookingDate(BOOKING_DATE).withFare(FARE)
-            .withStatus(STATUS).build();
+    private PassengerBooking passengers;
+    private List<PassengerBooking> passengersList = new ArrayList<PassengerBooking>();
+    private BookingRecordBooking bookingRecord = BookingRecordBooking.builder().withFlightNumber(FLIGHT_NUMBER)
+            .withOrigin(ORIGIN).withDestination(DESTINATION).withFlightDate(FLIGHT_DATE).withBookingDate(BOOKING_DATE)
+            .withFare(FARE).withStatus(STATUS).build();
 
     private PassengerResponse passengersResponse;
-    private Set<PassengerResponse> passengerResponseSet = new HashSet<PassengerResponse>();
+    private List<PassengerResponse> passengerResponseList = new ArrayList<PassengerResponse>();
     private BookingRecordResponse bookingRecordResponse = BookingRecordResponse.builder()
             .withFlightNumber(FLIGHT_NUMBER).withOrigin(ORIGIN).withDestination(DESTINATION).withFlightDate(FLIGHT_DATE)
             .withBookingDate(BOOKING_DATE).withFare(FARE).withStatus(STATUS).build();
@@ -57,15 +57,15 @@ public class BookingRecordIntoBookingRecordResponseConverterTest{
     public void setup(){
         MockitoAnnotations.initMocks(this);
 
-        passengers = Passenger.builder().withFirstname(FIRST_NAME_P1).withLastName(LAST_NAME_P1).withGender(GENDER_P1)
-                .withBookingRecord(bookingRecord).build();
-        passengersSet.add(passengers);
-        bookingRecord = bookingRecord.cloneBuilder().withPassengers(passengersSet).build();
+        passengers = PassengerBooking.builder().withFirstname(FIRST_NAME_P1).withLastName(LAST_NAME_P1)
+                .withGender(GENDER_P1).withBookingRecord(bookingRecord).build();
+        passengersList.add(passengers);
+        bookingRecord = bookingRecord.cloneBuilder().withPassengers(passengersList).build();
 
         passengersResponse = PassengerResponse.builder().withFirstname(FIRST_NAME_P1).withLastName(LAST_NAME_P1)
                 .withGender(GENDER_P1).withBookingRecordResponse(bookingRecordResponse).build();
-        passengerResponseSet.add(passengersResponse);
-        bookingRecordResponse = bookingRecordResponse.cloneBuilder().withPassengersResponse(passengerResponseSet)
+        passengerResponseList.add(passengersResponse);
+        bookingRecordResponse = bookingRecordResponse.cloneBuilder().withPassengersResponse(passengerResponseList)
                 .build();
 
     }

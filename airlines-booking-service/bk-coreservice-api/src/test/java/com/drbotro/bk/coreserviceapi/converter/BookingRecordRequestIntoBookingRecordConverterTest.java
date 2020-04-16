@@ -5,9 +5,9 @@ import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.mockito.Mockito.when;
 
+import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.List;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -18,8 +18,8 @@ import org.mockito.MockitoAnnotations;
 import com.drbotro.bk.coreserviceapi.data.BookingRecordRequest;
 import com.drbotro.bk.coreserviceapi.data.BookingStatus;
 import com.drbotro.bk.coreserviceapi.data.PassengerRequest;
-import com.drbotro.bk.repository.model.BookingRecord;
-import com.drbotro.bk.repository.model.Passenger;
+import com.drbotro.bk.repository.model.BookingRecordBooking;
+import com.drbotro.bk.repository.model.PassengerBooking;
 
 public class BookingRecordRequestIntoBookingRecordConverterTest{
 
@@ -36,16 +36,16 @@ public class BookingRecordRequestIntoBookingRecordConverterTest{
     private static final String STATUS = BookingStatus.BOOKING_CONFIRMED;
 
     private PassengerRequest passengersRequest;
-    private Set<PassengerRequest> passengersRequestSet = new HashSet<PassengerRequest>();
+    private List<PassengerRequest> passengersRequestList = new ArrayList<PassengerRequest>();
     private BookingRecordRequest bookingRecordRequest = BookingRecordRequest.builder().withFlightNumber(FLIGHT_NUMBER)
             .withOrigin(ORIGIN).withDestination(DESTINATION).withFlightDate(FLIGHT_DATE).withBookingDate(BOOKING_DATE)
             .withFare(FARE).withStatus(STATUS).build();
 
-    private Passenger passengers;
-    private Set<Passenger> passengersSet = new HashSet<Passenger>();
-    private BookingRecord bookingRecord = BookingRecord.builder().withFlightNumber(FLIGHT_NUMBER).withOrigin(ORIGIN)
-            .withDestination(DESTINATION).withFlightDate(FLIGHT_DATE).withBookingDate(BOOKING_DATE).withFare(FARE)
-            .withStatus(STATUS).build();
+    private PassengerBooking passengers;
+    private List<PassengerBooking> passengersList = new ArrayList<PassengerBooking>();
+    private BookingRecordBooking bookingRecord = BookingRecordBooking.builder().withFlightNumber(FLIGHT_NUMBER)
+            .withOrigin(ORIGIN).withDestination(DESTINATION).withFlightDate(FLIGHT_DATE).withBookingDate(BOOKING_DATE)
+            .withFare(FARE).withStatus(STATUS).build();
 
     @Mock
     private PassengerRequestIntoPassengerConverter passengerConverter;
@@ -59,13 +59,13 @@ public class BookingRecordRequestIntoBookingRecordConverterTest{
 
         passengersRequest = PassengerRequest.builder().withFirstname(FIRST_NAME_P1).withLastName(LAST_NAME_P1)
                 .withGender(GENDER_P1).withBookingRecordRequest(bookingRecordRequest).build();
-        passengersRequestSet.add(passengersRequest);
-        bookingRecordRequest = bookingRecordRequest.cloneBuilder().withPassengersRequest(passengersRequestSet).build();
+        passengersRequestList.add(passengersRequest);
+        bookingRecordRequest = bookingRecordRequest.cloneBuilder().withPassengersRequest(passengersRequestList).build();
 
-        passengers = Passenger.builder().withFirstname(FIRST_NAME_P1).withLastName(LAST_NAME_P1).withGender(GENDER_P1)
-                .withBookingRecord(bookingRecord).build();
-        passengersSet.add(passengers);
-        bookingRecord = bookingRecord.cloneBuilder().withPassengers(passengersSet).build();
+        passengers = PassengerBooking.builder().withFirstname(FIRST_NAME_P1).withLastName(LAST_NAME_P1)
+                .withGender(GENDER_P1).withBookingRecord(bookingRecord).build();
+        passengersList.add(passengers);
+        bookingRecord = bookingRecord.cloneBuilder().withPassengers(passengersList).build();
     }
 
     @Test

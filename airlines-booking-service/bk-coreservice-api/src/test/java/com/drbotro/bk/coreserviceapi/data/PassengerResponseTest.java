@@ -1,8 +1,8 @@
 package com.drbotro.bk.coreserviceapi.data;
 
+import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.List;
 
 import com.drbotro.bk.common.model.test.AbstractModelBeanTest;
 
@@ -24,13 +24,13 @@ public class PassengerResponseTest extends AbstractModelBeanTest<PassengerRespon
     private static final String STATUS = BookingStatus.BOOKING_CONFIRMED;
 
     private PassengerResponse passengersResponse;
-    private Set<PassengerResponse> passengersResponseSet = new HashSet<PassengerResponse>();
+    private List<PassengerResponse> passengersResponseList = new ArrayList<PassengerResponse>();
     private BookingRecordResponse bookingRecordResponse = BookingRecordResponse.builder()
             .withFlightNumber(FLIGHT_NUMBER).withOrigin(ORIGIN).withDestination(DESTINATION).withFlightDate(FLIGHT_DATE)
             .withBookingDate(BOOKING_DATE).withFare(FARE).withStatus(STATUS).build();
 
     private PassengerResponse passengersResponseOther;
-    private Set<PassengerResponse> passengersResponseOtherSet = new HashSet<PassengerResponse>();
+    private List<PassengerResponse> passengersResponseOtherList = new ArrayList<PassengerResponse>();
     private BookingRecordResponse bookingRecordResponseOther = BookingRecordResponse.builder()
             .withFlightNumber(FLIGHT_NUMBER).withOrigin(ORIGIN).withDestination(DESTINATION).withFlightDate(FLIGHT_DATE)
             .withBookingDate(BOOKING_DATE).withFare(FARE).withStatus(STATUS).build();
@@ -40,12 +40,12 @@ public class PassengerResponseTest extends AbstractModelBeanTest<PassengerRespon
 
         passengersResponse = PassengerResponse.builder().withFirstname(FIRST_NAME_P1).withLastName(LAST_NAME_P1)
                 .withGender(GENDER_P1).withBookingRecordResponse(bookingRecordResponse).build();
-        passengersResponseSet.add(passengersResponse);
+        passengersResponseList.add(passengersResponse);
         //bookingRecordResponse = bookingRecordResponse.cloneBuilder().withPassengersResponse(passengersResponseSet).build();
 
         passengersResponseOther = PassengerResponse.builder().withFirstname(FIRST_NAME_P2).withLastName(LAST_NAME_P2)
                 .withGender(GENDER_P2).withBookingRecordResponse(bookingRecordResponseOther).build();
-        passengersResponseOtherSet.add(passengersResponseOther);
+        passengersResponseOtherList.add(passengersResponseOther);
         //bookingRecordResponseOther = bookingRecordResponseOther.cloneBuilder().withPassengersResponse(passengersResponseOtherSet).build();
 
         entityA1 = PassengerResponse.builder().withFirstname(FIRST_NAME_P1).withLastName(LAST_NAME_P1)

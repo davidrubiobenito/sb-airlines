@@ -1,8 +1,8 @@
 package com.drbotro.bk.coreserviceapi.data;
 
+import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.List;
 
 import com.drbotro.bk.common.model.test.AbstractModelBeanTest;
 
@@ -24,13 +24,13 @@ public class BookingRecordRequestTest extends AbstractModelBeanTest<BookingRecor
     private static final String STATUS = BookingStatus.BOOKING_CONFIRMED;
 
     private PassengerRequest passengersRequest;
-    private Set<PassengerRequest> passengersRequestSet = new HashSet<PassengerRequest>();
+    private List<PassengerRequest> passengersRequestList = new ArrayList<PassengerRequest>();
     private BookingRecordRequest bookingRecordRequest = BookingRecordRequest.builder().withFlightNumber(FLIGHT_NUMBER)
             .withOrigin(ORIGIN).withDestination(DESTINATION).withFlightDate(FLIGHT_DATE).withBookingDate(BOOKING_DATE)
             .withFare(FARE).withStatus(STATUS).build();
 
     private PassengerRequest passengersRequestOther;
-    private Set<PassengerRequest> passengersRequestOtherSet = new HashSet<PassengerRequest>();
+    private List<PassengerRequest> passengersRequestOtherList = new ArrayList<PassengerRequest>();
     private BookingRecordRequest bookingRecordRequestOther = BookingRecordRequest.builder()
             .withFlightNumber(FLIGHT_NUMBER).withOrigin(ORIGIN).withDestination(DESTINATION).withFlightDate(FLIGHT_DATE)
             .withBookingDate(BOOKING_DATE).withFare(FARE).withStatus(STATUS).build();
@@ -39,15 +39,15 @@ public class BookingRecordRequestTest extends AbstractModelBeanTest<BookingRecor
     public void initEntities(){
         passengersRequest = PassengerRequest.builder().withFirstname(FIRST_NAME_P1).withLastName(LAST_NAME_P1)
                 .withGender(GENDER_P1).withBookingRecordRequest(bookingRecordRequest).build();
-        passengersRequestSet.add(passengersRequest);
+        passengersRequestList.add(passengersRequest);
 
         passengersRequestOther = PassengerRequest.builder().withFirstname(FIRST_NAME_P2).withLastName(LAST_NAME_P2)
                 .withGender(GENDER_P2).withBookingRecordRequest(bookingRecordRequestOther).build();
-        passengersRequestOtherSet.add(passengersRequestOther);
+        passengersRequestOtherList.add(passengersRequestOther);
 
-        entityA1 = bookingRecordRequest.cloneBuilder().withPassengersRequest(passengersRequestSet).build();
-        entityA2 = bookingRecordRequest.cloneBuilder().withPassengersRequest(passengersRequestSet).build();
-        entityB = bookingRecordRequestOther.cloneBuilder().withPassengersRequest(passengersRequestOtherSet).build();
+        entityA1 = bookingRecordRequest.cloneBuilder().withPassengersRequest(passengersRequestList).build();
+        entityA2 = bookingRecordRequest.cloneBuilder().withPassengersRequest(passengersRequestList).build();
+        entityB = bookingRecordRequestOther.cloneBuilder().withPassengersRequest(passengersRequestOtherList).build();
 
     }
 

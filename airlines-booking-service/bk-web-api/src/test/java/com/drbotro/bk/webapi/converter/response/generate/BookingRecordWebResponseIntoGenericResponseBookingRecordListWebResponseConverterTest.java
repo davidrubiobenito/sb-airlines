@@ -4,10 +4,10 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.List;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -35,7 +35,7 @@ public class BookingRecordWebResponseIntoGenericResponseBookingRecordListWebResp
     private static final String STATUS = BookingStatus.BOOKING_CONFIRMED;
 
     private PassengerWebResponse passengerWebResponse;
-    private Set<PassengerWebResponse> passengersWebResponseSet = new HashSet<PassengerWebResponse>();
+    private List<PassengerWebResponse> passengersWebResponseList = new ArrayList<PassengerWebResponse>();
     private BookingRecordWebResponse bookingRecordWebResponse = BookingRecordWebResponse.builder()
             .withFlightNumber(FLIGHT_NUMBER).withOrigin(ORIGIN).withDestination(DESTINATION).withFlightDate(FLIGHT_DATE)
             .withBookingDate(BOOKING_DATE).withFare(FARE).withStatus(STATUS).build();
@@ -49,9 +49,9 @@ public class BookingRecordWebResponseIntoGenericResponseBookingRecordListWebResp
 
         passengerWebResponse = PassengerWebResponse.builder().withFirstname(FIRST_NAME_P1).withLastName(LAST_NAME_P1)
                 .withGender(GENDER_P1).withBookingRecordWebResponse(bookingRecordWebResponse).build();
-        passengersWebResponseSet.add(passengerWebResponse);
+        passengersWebResponseList.add(passengerWebResponse);
         bookingRecordWebResponse = bookingRecordWebResponse.cloneBuilder()
-                .withPassengersWebResponse(passengersWebResponseSet).build();
+                .withPassengersWebResponse(passengersWebResponseList).build();
     }
 
     @Test

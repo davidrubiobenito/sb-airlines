@@ -1,8 +1,8 @@
 package com.drbotro.bk.coreservice;
 
 import java.util.Date;
+import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
@@ -23,8 +23,8 @@ import com.drbotro.bk.coreserviceapi.data.PassengerRequest;
 import com.drbotro.bk.coreserviceapi.inter.IBookingService;
 import com.drbotro.bk.repository.dao.IBookingRepository;
 import com.drbotro.bk.repository.dao.IInventoryRepository;
-import com.drbotro.bk.repository.model.BookingRecord;
-import com.drbotro.bk.repository.model.Inventory;
+import com.drbotro.bk.repository.model.BookingRecordBooking;
+import com.drbotro.bk.repository.model.InventoryBooking;
 
 @Service
 public class BookingServiceImpl implements IBookingService{
@@ -70,7 +70,7 @@ public class BookingServiceImpl implements IBookingService{
             throw ErrorException.builder().withError(204).withDescription("fare is tampered").build();
 
         //check inventory
-        Optional<Inventory> inventoryOptional = iInventoryRepository.findByFlightNumberAndFlightDate(
+        Optional<InventoryBooking> inventoryOptional = iInventoryRepository.findByFlightNumberAndFlightDate(
                 bookingRecordRequest.getFlightNumber(), bookingRecordRequest.getFlightDate());
 
         if(inventoryOptional.isPresent()){
@@ -80,7 +80,7 @@ public class BookingServiceImpl implements IBookingService{
                 logger.info("successfully checked inventory: {}", inventoryOptional.get());
                 logger.info("calling inventory to update inventory");
                 //update inventory
-                Inventory inventoryAux = inventoryOptional.get().cloneBuilder().withAvailable(
+                InventoryBooking inventoryAux = inventoryOptional.get().cloneBuilder().withAvailable(
                         inventoryOptional.get().getAvailable() - bookingRecordRequest.getPassengersRequest().size())
                         .build();
                 iInventoryRepository.saveAndFlush(inventoryAux);
@@ -89,14 +89,16 @@ public class BookingServiceImpl implements IBookingService{
         }
 
         //save booking
+        List<PassengerRequest> passengers = bookingRecordRequest.getPassengersRequest().stream()
+                .map(passenger -> passenger.cloneBuilder().withBookingRecordRequest(bookingRecordRequest).build())
+                .collect(Collectors.toList());
+
+        logger.info("updated passengers: {}", passengers);
+
         BookingRecordRequest bookingRecordRequestAux = bookingRecordRequest.cloneBuilder()
                 .withStatus(BookingStatus.BOOKING_CONFIRMED).withBookingDate(new Date()).build();
 
-        Set<PassengerRequest> passengers = bookingRecordRequestAux.getPassengersRequest().stream()
-                .map(passenger -> passenger.cloneBuilder().withBookingRecordRequest(bookingRecordRequestAux).build())
-                .collect(Collectors.toSet());
-
-        logger.info("updated passengers: {}", passengers);
+        logger.info("bookingRecordRequestAux : {}", bookingRecordRequestAux);
 
         return bookingRecordResponseConverter
                 .convert(iBookingRepository.save(bookingRecordConverter.convert(bookingRecordRequestAux)));
@@ -104,8 +106,8 @@ public class BookingServiceImpl implements IBookingService{
 
     @Override
     public BookingRecordResponse getBookingRecordById(long id){
-        BookingRecord bookingRecord = null;
-        Optional<BookingRecord> optional = iBookingRepository.findById(id);
+        BookingRecordBooking bookingRecord = null;
+        Optional<BookingRecordBooking> optional = iBookingRepository.findById(id);
         if(optional.isPresent()){
             bookingRecord = optional.get();
         }
@@ -114,12 +116,19 @@ public class BookingServiceImpl implements IBookingService{
 
     @Override
     public BookingRecordResponse updateStatusBookingRecord(String status, long id){
-        BookingRecord bookingRecord = null;
-        Optional<BookingRecord> optional = iBookingRepository.findById(id);
+        BookingRecordBooking bookingRecord = null;
+        Optional<BookingRecordBooking> optional = iBookingRepository.findById(id);
         if(optional.isPresent()){
             bookingRecord = optional.get().cloneBuilder().withStatus(status).build();
         }
         return bookingRecordResponseConverter.convert(bookingRecord);
+    }
+
+    @Override
+    public List<BookingRecordResponse> findAllBookingRecord(){
+        List<BookingRecordBooking> bookingRecord = iBookingRepository.findAll();
+        return bookingRecord.stream().map(br -> bookingRecordResponseConverter.convert(br))
+                .collect(Collectors.toList());
     }
 
 }

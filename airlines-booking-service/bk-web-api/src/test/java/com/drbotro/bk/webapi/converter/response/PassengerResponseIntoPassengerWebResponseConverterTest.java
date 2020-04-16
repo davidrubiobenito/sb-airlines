@@ -5,9 +5,9 @@ import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.mockito.Mockito.when;
 
+import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.List;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -36,13 +36,13 @@ public class PassengerResponseIntoPassengerWebResponseConverterTest{
     private static final String STATUS = BookingStatus.BOOKING_CONFIRMED;
 
     private PassengerResponse passengersResponse;
-    private Set<PassengerResponse> passengersResponseSet = new HashSet<PassengerResponse>();
+    private List<PassengerResponse> passengersResponseList = new ArrayList<PassengerResponse>();
     private BookingRecordResponse bookingRecordResponse = BookingRecordResponse.builder()
             .withFlightNumber(FLIGHT_NUMBER).withOrigin(ORIGIN).withDestination(DESTINATION).withFlightDate(FLIGHT_DATE)
             .withBookingDate(BOOKING_DATE).withFare(FARE).withStatus(STATUS).build();
 
     private PassengerWebResponse passengersWebResponse;
-    private Set<PassengerWebResponse> passengersWebResponseSet = new HashSet<PassengerWebResponse>();
+    private List<PassengerWebResponse> passengersWebResponseList = new ArrayList<PassengerWebResponse>();
     private BookingRecordWebResponse bookingRecordWebResponse = BookingRecordWebResponse.builder()
             .withFlightNumber(FLIGHT_NUMBER).withOrigin(ORIGIN).withDestination(DESTINATION).withFlightDate(FLIGHT_DATE)
             .withBookingDate(BOOKING_DATE).withFare(FARE).withStatus(STATUS).build();
@@ -59,11 +59,11 @@ public class PassengerResponseIntoPassengerWebResponseConverterTest{
 
         passengersResponse = PassengerResponse.builder().withFirstname(FIRST_NAME_P1).withLastName(LAST_NAME_P1)
                 .withGender(GENDER_P1).withBookingRecordResponse(bookingRecordResponse).build();
-        passengersResponseSet.add(passengersResponse);
+        passengersResponseList.add(passengersResponse);
 
         passengersWebResponse = PassengerWebResponse.builder().withFirstname(FIRST_NAME_P1).withLastName(LAST_NAME_P1)
                 .withGender(GENDER_P1).withBookingRecordWebResponse(bookingRecordWebResponse).build();
-        passengersWebResponseSet.add(passengersWebResponse);
+        passengersWebResponseList.add(passengersWebResponse);
     }
 
     @Test
