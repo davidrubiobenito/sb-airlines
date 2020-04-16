@@ -1,0 +1,28 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<packaging>jar</packaging>
+	
+	<parent>
+		<groupId>com.drbotro.sb-airlines</groupId>
+		<artifactId>airlines-checkin-service</artifactId>
+		<version>${revision}</version>
+	</parent>
+	
+	<artifactId>ck-repository</artifactId>
+	<name>ck-repository</name>
+	
+		<dependencies>
+		<dependency>
+			<groupId>com.drbotro.sb-airlines</groupId>
+			<artifactId>ck-common</artifactId>
+			<version>${revision}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.drbotro.sb-airlines</groupId>
+			<artifactId>ck-coreservice-api</artifactId>
+			<version>${revision}</version>
+		</dependency>
+	</dependencies>
+</project>
