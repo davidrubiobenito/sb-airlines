@@ -1,5 +1,8 @@
 package com.drbotro.bk.webrs;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.CommandLineRunner;
@@ -13,6 +16,7 @@ import org.springframework.web.client.RestTemplate;
 
 import com.drbotro.bk.coreserviceapi.inter.IBookingService;
 import com.drbotro.bk.repository.dao.IInventoryRepository;
+import com.drbotro.bk.repository.model.InventoryBooking;
 
 @SpringBootApplication
 @ComponentScan(basePackages = {"com.drbotro.*"})
@@ -35,7 +39,6 @@ public class WebRSApplication{
     public CommandLineRunner setup(IInventoryRepository iInventoryRepository, IBookingService iBookingService){
         return (args) -> {
 
-            /*
             List<InventoryBooking> inventoryList = new ArrayList<>();
             inventoryList.add(InventoryBooking.builder().withFlightNumber("BF100").withFlightDate("22-JAN-16")
                     .withAvailable(100).build());
@@ -51,9 +54,9 @@ public class WebRSApplication{
                     .withAvailable(100).build());
             inventoryList.add(InventoryBooking.builder().withFlightNumber("BF106").withFlightDate("22-JAN-16")
                     .withAvailable(100).build());
-            
-            inventoryList.forEach(inv -> iInventoryRepository.save(inv));
-            */
+
+            //inventoryList.forEach(inv -> iInventoryRepository.save(inv));
+            inventoryList.forEach(iInventoryRepository::save);
 
             /*
             BookingRecordRequest bookingRecordRequest = BookingRecordRequest.builder().withFlightNumber("BF101")

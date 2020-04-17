@@ -14,19 +14,19 @@ import org.springframework.web.client.RestTemplate;
 import com.drbotro.bk.common.exception.ErrorException;
 import com.drbotro.bk.coreserviceapi.converter.BookingRecordIntoBookingRecordResponseConverter;
 import com.drbotro.bk.coreserviceapi.converter.BookingRecordRequestIntoBookingRecordConverter;
-import com.drbotro.bk.coreserviceapi.data.BookingRecordRequest;
-import com.drbotro.bk.coreserviceapi.data.BookingRecordResponse;
 import com.drbotro.bk.coreserviceapi.data.BookingStatus;
-import com.drbotro.bk.coreserviceapi.data.FareWebResponse;
-import com.drbotro.bk.coreserviceapi.data.GenericResponseFareWebResponse;
-import com.drbotro.bk.coreserviceapi.data.PassengerRequest;
+import com.drbotro.bk.coreserviceapi.data.request.BookingRecordRequest;
+import com.drbotro.bk.coreserviceapi.data.request.PassengerRequest;
+import com.drbotro.bk.coreserviceapi.data.response.BookingRecordResponse;
+import com.drbotro.bk.coreserviceapi.data.response.FareWebResponse;
+import com.drbotro.bk.coreserviceapi.data.response.GenericResponseFareWebResponse;
 import com.drbotro.bk.coreserviceapi.inter.IBookingService;
 import com.drbotro.bk.repository.dao.IBookingRepository;
 import com.drbotro.bk.repository.dao.IInventoryRepository;
 import com.drbotro.bk.repository.model.BookingRecordBooking;
 import com.drbotro.bk.repository.model.InventoryBooking;
 
-@Service
+@Service(value = "BookingServiceImpl")
 public class BookingServiceImpl implements IBookingService{
 
     private static final Logger logger = LoggerFactory.getLogger(BookingServiceImpl.class);
@@ -46,7 +46,7 @@ public class BookingServiceImpl implements IBookingService{
     private BookingRecordIntoBookingRecordResponseConverter bookingRecordResponseConverter;
 
     @Override
-    public BookingRecordResponse saveBookingRecord(BookingRecordRequest bookingRecordRequest) throws ErrorException{
+    public BookingRecordBooking saveBookingRecord(BookingRecordRequest bookingRecordRequest) throws ErrorException{
 
         logger.info("calling fares to get fare");
         //call fares to get fare
@@ -95,13 +95,18 @@ public class BookingServiceImpl implements IBookingService{
 
         logger.info("updated passengers: {}", passengers);
 
-        BookingRecordRequest bookingRecordRequestAux = bookingRecordRequest.cloneBuilder()
-                .withStatus(BookingStatus.BOOKING_CONFIRMED).withBookingDate(new Date()).build();
+        BookingRecordRequest bookingRecordRequestAux = BookingRecordRequest.builder()
+                .withFlightNumber(bookingRecordRequest.getFlightNumber()).withOrigin(bookingRecordRequest.getOrigin())
+                .withDestination(bookingRecordRequest.getDestination())
+                .withFlightDate(bookingRecordRequest.getFlightDate())
+                .withBookingDate(bookingRecordRequest.getBookingDate()).withFare(bookingRecordRequest.getFare())
+                .withStatus(BookingStatus.BOOKING_CONFIRMED).withBookingDate(new Date())
+                .withPassengersRequest(bookingRecordRequest.getPassengersRequest()).build();
 
         logger.info("bookingRecordRequestAux : {}", bookingRecordRequestAux);
 
-        return bookingRecordResponseConverter
-                .convert(iBookingRepository.save(bookingRecordConverter.convert(bookingRecordRequestAux)));
+        //return bookingRecordResponseConverter.convert(iBookingRepository.save(bookingRecordConverter.convert(bookingRecordRequestAux)));
+        return iBookingRepository.save(bookingRecordConverter.convert(bookingRecordRequestAux));
     }
 
     @Override
@@ -129,6 +134,11 @@ public class BookingServiceImpl implements IBookingService{
         List<BookingRecordBooking> bookingRecord = iBookingRepository.findAll();
         return bookingRecord.stream().map(br -> bookingRecordResponseConverter.convert(br))
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public BookingRecordBooking addBooking(BookingRecordBooking bookingRecordBooking){
+        return iBookingRepository.save(bookingRecordBooking);
     }
 
 }

@@ -13,12 +13,13 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+@SuppressWarnings("serial")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 public class BookingRecordWebRequest extends AbstractModelBean{
 
-    private long id;
+    private long bookingRecordWebRequestId;
     private String flightNumber;
     private String origin;
     private String destination;
@@ -30,7 +31,7 @@ public class BookingRecordWebRequest extends AbstractModelBean{
     private List<PassengerWebRequest> passengersWebRequest;
 
     private BookingRecordWebRequest(BookingRecordWebRequestBuilder builder){
-        this.id = builder.id;
+        this.bookingRecordWebRequestId = builder.bookingRecordWebRequestId;
         this.flightNumber = builder.flightNumber;
         this.origin = builder.origin;
         this.destination = builder.destination;
@@ -41,8 +42,8 @@ public class BookingRecordWebRequest extends AbstractModelBean{
         this.passengersWebRequest = builder.passengersWebRequest;
     }
 
-    public long getId(){
-        return id;
+    public long getBookingRecordWebRequestId(){
+        return bookingRecordWebRequestId;
     }
 
     public String getFlightNumber(){
@@ -83,18 +84,19 @@ public class BookingRecordWebRequest extends AbstractModelBean{
             return false;
         }
         final BookingRecordWebRequest castOther = (BookingRecordWebRequest) other;
-        return new EqualsBuilder().append(id, castOther.id).append(flightNumber, castOther.flightNumber)
-                .append(origin, castOther.origin).append(destination, castOther.destination)
-                .append(flightDate, castOther.flightDate).append(bookingDate, castOther.bookingDate)
-                .append(fare, castOther.fare).append(status, castOther.status)
-                .append(passengersWebRequest, castOther.passengersWebRequest).isEquals();
+        return new EqualsBuilder().append(bookingRecordWebRequestId, castOther.bookingRecordWebRequestId)
+                .append(flightNumber, castOther.flightNumber).append(origin, castOther.origin)
+                .append(destination, castOther.destination).append(flightDate, castOther.flightDate)
+                .append(bookingDate, castOther.bookingDate).append(fare, castOther.fare)
+                .append(status, castOther.status).append(passengersWebRequest, castOther.passengersWebRequest)
+                .isEquals();
     }
 
     @Override
     public int hashCode(){
-        return new HashCodeBuilder().append(id).append(flightNumber).append(origin).append(destination)
-                .append(flightDate).append(bookingDate).append(fare).append(status).append(passengersWebRequest)
-                .toHashCode();
+        return new HashCodeBuilder().append(bookingRecordWebRequestId).append(flightNumber).append(origin)
+                .append(destination).append(flightDate).append(bookingDate).append(fare).append(status)
+                .append(passengersWebRequest).toHashCode();
     }
 
     public static BookingRecordWebRequestBuilder builder(){
@@ -102,10 +104,10 @@ public class BookingRecordWebRequest extends AbstractModelBean{
     }
 
     public BookingRecordWebRequestBuilder cloneBuilder(){
-        return new BookingRecordWebRequestBuilder().withId(this.id).withFlightNumber(this.flightNumber)
-                .withOrigin(this.origin).withDestination(this.destination).withFlightDate(this.flightDate)
-                .withBookingDate(this.bookingDate).withFare(this.fare).withStatus(this.status)
-                .withPassengersWebRequest(this.passengersWebRequest);
+        return new BookingRecordWebRequestBuilder().withBookingRecordWebRequestId(this.bookingRecordWebRequestId)
+                .withFlightNumber(this.flightNumber).withOrigin(this.origin).withDestination(this.destination)
+                .withFlightDate(this.flightDate).withBookingDate(this.bookingDate).withFare(this.fare)
+                .withStatus(this.status).withPassengersWebRequest(this.passengersWebRequest);
     }
 
     public interface IBookingRecordWebRequestBuilder{
@@ -114,7 +116,7 @@ public class BookingRecordWebRequest extends AbstractModelBean{
 
     public static final class BookingRecordWebRequestBuilder implements IBookingRecordWebRequestBuilder{
 
-        private long id;
+        private long bookingRecordWebRequestId;
         private String flightNumber;
         private String origin;
         private String destination;
@@ -127,8 +129,8 @@ public class BookingRecordWebRequest extends AbstractModelBean{
         private BookingRecordWebRequestBuilder(){
         }
 
-        public BookingRecordWebRequestBuilder withId(long id){
-            this.id = id;
+        public BookingRecordWebRequestBuilder withBookingRecordWebRequestId(long bookingRecordWebRequestId){
+            this.bookingRecordWebRequestId = bookingRecordWebRequestId;
             return self();
         }
 

@@ -6,17 +6,21 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.Table;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 import com.drbotro.bk.common.model.AbstractModelBean;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+@SuppressWarnings("serial")
 @Entity
+@Table(name = "bk_passenger")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -58,6 +62,7 @@ public class PassengerBooking extends AbstractModelBean{
         return gender;
     }
 
+    @JsonBackReference
     public BookingRecordBooking getBookingRecord(){
         return bookingRecord;
     }

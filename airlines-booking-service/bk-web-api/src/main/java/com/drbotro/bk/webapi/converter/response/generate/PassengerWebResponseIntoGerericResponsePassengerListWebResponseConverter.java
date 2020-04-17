@@ -8,7 +8,7 @@ import com.drbotro.bk.common.converter.Converter;
 import com.drbotro.bk.webapi.response.GenericResponsePassengerWebResponse;
 import com.drbotro.bk.webapi.response.PassengerWebResponse;
 
-@Component
+@Component(value = "passengerWebResponseIntoGerericResponsePassengerListWebResponseConverter")
 public class PassengerWebResponseIntoGerericResponsePassengerListWebResponseConverter
         implements Converter<PassengerWebResponse, GenericResponsePassengerWebResponse>{
 

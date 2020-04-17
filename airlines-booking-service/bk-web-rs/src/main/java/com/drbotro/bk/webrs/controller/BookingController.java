@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.drbotro.bk.common.exception.ErrorException;
 import com.drbotro.bk.coreserviceapi.inter.IBookingService;
+import com.drbotro.bk.repository.model.BookingRecordBooking;
 import com.drbotro.bk.webapi.converter.request.BookingRecordWebRequestIntoBookingRecordRequestConverter;
 import com.drbotro.bk.webapi.converter.response.BookingRecordResponseIntoBookingRecordWebResponseConverter;
 import com.drbotro.bk.webapi.converter.response.generate.BookingRecordListWebResponseIntoGenericResponseBookingRecordListWebResponseConverter;
@@ -26,7 +27,7 @@ import com.drbotro.bk.webapi.response.BookingRecordWebResponse;
 import com.drbotro.bk.webapi.response.GenericResponseBookingRecordWebResponse;
 import com.drbotro.bk.webapi.version.Version;
 
-@RestController
+@RestController(value = "bookingController")
 @RequestMapping(Version.V1 + "/booking")
 public class BookingController{
 
@@ -63,13 +64,27 @@ public class BookingController{
     }
 
     @PostMapping(path = "/create", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<GenericResponseBookingRecordWebResponse> addBooking(
-            @RequestBody BookingRecordWebRequest bookingRecordWebRequest) throws ErrorException{
+    public ResponseEntity<BookingRecordBooking> addBooking(@RequestBody BookingRecordWebRequest bookingRecordWebRequest)
+            throws ErrorException{
 
+        /*
         BookingRecordWebResponse bookingWebResponse = bookingRecordWebResponseConverter.convert(
                 iBookingService.saveBookingRecord(bookingRecordRequestConverter.convert(bookingRecordWebRequest)));
-
+        
         return ResponseEntity.ok(genericResponseBookingRecordAsListWebResponseConverter.convert(bookingWebResponse));
+        */
+        BookingRecordBooking bookingRecordBookingResponse = iBookingService
+                .saveBookingRecord(bookingRecordRequestConverter.convert(bookingRecordWebRequest));
+
+        return ResponseEntity.ok(bookingRecordBookingResponse);
+    }
+
+    @PostMapping(path = "/addBook", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<BookingRecordBooking> addBookingConv(@RequestBody BookingRecordBooking bookingRecordBooking){
+
+        BookingRecordBooking bookingRecordBookingResponse = iBookingService.addBooking(bookingRecordBooking);
+
+        return ResponseEntity.ok(bookingRecordBookingResponse);
     }
 
 }

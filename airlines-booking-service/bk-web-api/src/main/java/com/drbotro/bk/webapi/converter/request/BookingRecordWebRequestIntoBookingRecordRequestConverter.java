@@ -6,10 +6,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.drbotro.bk.common.converter.Converter;
-import com.drbotro.bk.coreserviceapi.data.BookingRecordRequest;
+import com.drbotro.bk.coreserviceapi.data.request.BookingRecordRequest;
 import com.drbotro.bk.webapi.request.BookingRecordWebRequest;
 
-@Component
+@Component(value = "bookingRecordWebRequestIntoBookingRecordRequestConverter")
 public class BookingRecordWebRequestIntoBookingRecordRequestConverter
         implements Converter<BookingRecordWebRequest, BookingRecordRequest>{
 

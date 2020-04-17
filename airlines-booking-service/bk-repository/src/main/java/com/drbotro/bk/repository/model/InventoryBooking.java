@@ -17,14 +17,14 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name = "inventory_booking")
+@Table(name = "bk_inventory")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 public class InventoryBooking extends AbstractModelBean{
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private long id;
 

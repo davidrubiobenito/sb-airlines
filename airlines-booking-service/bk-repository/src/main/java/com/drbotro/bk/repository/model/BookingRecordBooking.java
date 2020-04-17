@@ -6,22 +6,26 @@ import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+import javax.persistence.Table;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 import com.drbotro.bk.common.model.AbstractModelBean;
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+@SuppressWarnings("serial")
 @Entity
+@Table(name = "bk_booking_record")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -39,9 +43,7 @@ public class BookingRecordBooking extends AbstractModelBean{
     private String fare;
     private String status;
 
-    //@OneToMany(cascade = CascadeType.ALL, mappedBy = "bookingRecord", orphanRemoval = true)
-    @OneToMany(mappedBy = "bookingRecord", cascade = CascadeType.ALL)
-    @JsonIgnore
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "bookingRecord", fetch = FetchType.LAZY)
     private List<PassengerBooking> passengers;
 
     private BookingRecordBooking(BookingRecordBuilder builder){
@@ -88,6 +90,7 @@ public class BookingRecordBooking extends AbstractModelBean{
         return status;
     }
 
+    @JsonManagedReference
     public List<PassengerBooking> getPassengers(){
         return passengers;
     }

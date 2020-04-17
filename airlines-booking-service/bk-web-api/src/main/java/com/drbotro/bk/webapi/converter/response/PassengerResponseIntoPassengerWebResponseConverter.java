@@ -4,10 +4,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.drbotro.bk.common.converter.Converter;
-import com.drbotro.bk.coreserviceapi.data.PassengerResponse;
+import com.drbotro.bk.coreserviceapi.data.response.PassengerResponse;
 import com.drbotro.bk.webapi.response.PassengerWebResponse;
 
-@Component
+@Component(value = "passengerResponseIntoPassengerWebResponseConverter")
 public class PassengerResponseIntoPassengerWebResponseConverter
         implements Converter<PassengerResponse, PassengerWebResponse>{
 

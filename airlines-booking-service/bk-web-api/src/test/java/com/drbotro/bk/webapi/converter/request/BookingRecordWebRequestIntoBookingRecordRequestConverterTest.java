@@ -15,9 +15,9 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-import com.drbotro.bk.coreserviceapi.data.BookingRecordRequest;
 import com.drbotro.bk.coreserviceapi.data.BookingStatus;
-import com.drbotro.bk.coreserviceapi.data.PassengerRequest;
+import com.drbotro.bk.coreserviceapi.data.request.BookingRecordRequest;
+import com.drbotro.bk.coreserviceapi.data.request.PassengerRequest;
 import com.drbotro.bk.webapi.request.BookingRecordWebRequest;
 import com.drbotro.bk.webapi.request.PassengerWebRequest;
 

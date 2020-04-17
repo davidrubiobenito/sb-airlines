@@ -8,7 +8,7 @@ import com.drbotro.bk.common.converter.Converter;
 import com.drbotro.bk.webapi.response.BookingRecordWebResponse;
 import com.drbotro.bk.webapi.response.GenericResponseBookingRecordWebResponse;
 
-@Component
+@Component(value = "bookingRecordWebResponseIntoGenericResponseBookingRecordListWebResponseConverter")
 public class BookingRecordWebResponseIntoGenericResponseBookingRecordListWebResponseConverter
         implements Converter<BookingRecordWebResponse, GenericResponseBookingRecordWebResponse>{
 

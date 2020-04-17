@@ -7,10 +7,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.drbotro.bk.common.converter.Converter;
-import com.drbotro.bk.coreserviceapi.data.BookingRecordResponse;
+import com.drbotro.bk.coreserviceapi.data.response.BookingRecordResponse;
 import com.drbotro.bk.repository.model.BookingRecordBooking;
 
-@Component
+@Component(value = "bookingRecordListIntoBookingRecordListResponseConverter")
 public class BookingRecordListIntoBookingRecordListResponseConverter
         implements Converter<List<BookingRecordBooking>, List<BookingRecordResponse>>{
 
