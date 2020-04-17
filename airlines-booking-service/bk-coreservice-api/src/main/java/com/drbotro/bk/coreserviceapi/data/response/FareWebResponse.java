@@ -1,4 +1,4 @@
-package com.drbotro.bk.coreserviceapi.data;
+package com.drbotro.bk.coreserviceapi.data.response;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;

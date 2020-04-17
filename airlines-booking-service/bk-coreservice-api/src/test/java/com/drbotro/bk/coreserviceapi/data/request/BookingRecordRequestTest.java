@@ -1,10 +1,11 @@
-package com.drbotro.bk.coreserviceapi.data;
+package com.drbotro.bk.coreserviceapi.data.request;
 
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 import com.drbotro.bk.common.model.test.AbstractModelBeanTest;
+import com.drbotro.bk.coreserviceapi.data.BookingStatus;
 
 public class BookingRecordRequestTest extends AbstractModelBeanTest<BookingRecordRequest>{
 

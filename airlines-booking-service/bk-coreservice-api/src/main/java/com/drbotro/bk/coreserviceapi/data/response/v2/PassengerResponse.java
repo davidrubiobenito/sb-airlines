@@ -1,4 +1,4 @@
-package com.drbotro.bk.coreserviceapi.data;
+package com.drbotro.bk.coreserviceapi.data.response.v2;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
@@ -9,6 +9,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+@SuppressWarnings("serial")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -18,14 +19,12 @@ public class PassengerResponse extends AbstractModelBean{
     private String firstName;
     private String lastName;
     private String gender;
-    private BookingRecordResponse bookingRecordResponse;
 
     private PassengerResponse(PassengerResponseBuilder builder){
         this.id = builder.id;
         this.firstName = builder.firstName;
         this.lastName = builder.lastName;
         this.gender = builder.gender;
-        this.bookingRecordResponse = builder.bookingRecordResponse;
     }
 
     public Long getId(){
@@ -44,10 +43,6 @@ public class PassengerResponse extends AbstractModelBean{
         return gender;
     }
 
-    public BookingRecordResponse getBookingRecordResponse(){
-        return bookingRecordResponse;
-    }
-
     @Override
     public boolean equals(Object other){
         if(!(other instanceof PassengerResponse)){
@@ -55,14 +50,12 @@ public class PassengerResponse extends AbstractModelBean{
         }
         final PassengerResponse castOther = (PassengerResponse) other;
         return new EqualsBuilder().append(id, castOther.id).append(firstName, castOther.firstName)
-                .append(lastName, castOther.lastName).append(gender, castOther.gender)
-                .append(bookingRecordResponse, castOther.bookingRecordResponse).isEquals();
+                .append(lastName, castOther.lastName).append(gender, castOther.gender).isEquals();
     }
 
     @Override
     public int hashCode(){
-        return new HashCodeBuilder().append(id).append(firstName).append(lastName).append(gender)
-                .append(bookingRecordResponse).toHashCode();
+        return new HashCodeBuilder().append(id).append(firstName).append(lastName).append(gender).toHashCode();
     }
 
     public static PassengerResponseBuilder builder(){
@@ -71,7 +64,7 @@ public class PassengerResponse extends AbstractModelBean{
 
     public PassengerResponseBuilder cloneBuilder(){
         return new PassengerResponseBuilder().withId(this.id).withFirstname(this.firstName).withLastName(this.lastName)
-                .withGender(this.gender).withBookingRecordResponse(this.bookingRecordResponse);
+                .withGender(this.gender);
     }
 
     public interface IPassengerResponseBuilder{
@@ -84,7 +77,6 @@ public class PassengerResponse extends AbstractModelBean{
         private String firstName;
         private String lastName;
         private String gender;
-        private BookingRecordResponse bookingRecordResponse;
 
         public PassengerResponseBuilder withId(long id){
             this.id = id;
@@ -103,11 +95,6 @@ public class PassengerResponse extends AbstractModelBean{
 
         public PassengerResponseBuilder withGender(String gender){
             this.gender = gender;
-            return self();
-        }
-
-        public PassengerResponseBuilder withBookingRecordResponse(BookingRecordResponse bookingRecordResponse){
-            this.bookingRecordResponse = bookingRecordResponse;
             return self();
         }
 

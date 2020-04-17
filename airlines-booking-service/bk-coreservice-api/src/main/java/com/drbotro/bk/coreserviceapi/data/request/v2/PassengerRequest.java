@@ -1,4 +1,4 @@
-package com.drbotro.bk.coreserviceapi.data;
+package com.drbotro.bk.coreserviceapi.data.request.v2;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
@@ -9,27 +9,26 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+@SuppressWarnings("serial")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 public class PassengerRequest extends AbstractModelBean{
 
-    private long id;
+    private long passengerRequestId;
     private String firstName;
     private String lastName;
     private String gender;
-    private BookingRecordRequest bookingRecordRequest;
 
     private PassengerRequest(PassengerRequestBuilder builder){
-        this.id = builder.id;
+        this.passengerRequestId = builder.passengerRequestId;
         this.firstName = builder.firstName;
         this.lastName = builder.lastName;
         this.gender = builder.gender;
-        this.bookingRecordRequest = builder.bookingRecordRequest;
     }
 
-    public Long getId(){
-        return id;
+    public Long getPassengerRequestId(){
+        return passengerRequestId;
     }
 
     public String getFirstName(){
@@ -44,25 +43,21 @@ public class PassengerRequest extends AbstractModelBean{
         return gender;
     }
 
-    public BookingRecordRequest getBookingRecordRequest(){
-        return bookingRecordRequest;
-    }
-
     @Override
     public boolean equals(Object other){
         if(!(other instanceof PassengerRequest)){
             return false;
         }
         final PassengerRequest castOther = (PassengerRequest) other;
-        return new EqualsBuilder().append(id, castOther.id).append(firstName, castOther.firstName)
-                .append(lastName, castOther.lastName).append(gender, castOther.gender)
-                .append(bookingRecordRequest, castOther.bookingRecordRequest).isEquals();
+        return new EqualsBuilder().append(passengerRequestId, castOther.passengerRequestId)
+                .append(firstName, castOther.firstName).append(lastName, castOther.lastName)
+                .append(gender, castOther.gender).isEquals();
     }
 
     @Override
     public int hashCode(){
-        return new HashCodeBuilder().append(id).append(firstName).append(lastName).append(gender)
-                .append(bookingRecordRequest).toHashCode();
+        return new HashCodeBuilder().append(passengerRequestId).append(firstName).append(lastName).append(gender)
+                .toHashCode();
     }
 
     public static PassengerRequestBuilder builder(){
@@ -70,8 +65,8 @@ public class PassengerRequest extends AbstractModelBean{
     }
 
     public PassengerRequestBuilder cloneBuilder(){
-        return new PassengerRequestBuilder().withId(this.id).withFirstname(this.firstName).withLastName(this.lastName)
-                .withGender(this.gender).withBookingRecordRequest(this.bookingRecordRequest);
+        return new PassengerRequestBuilder().withPassengerRequestId(this.passengerRequestId)
+                .withFirstname(this.firstName).withLastName(this.lastName).withGender(this.gender);
     }
 
     public interface IPassengerRequestBuilder{
@@ -80,14 +75,13 @@ public class PassengerRequest extends AbstractModelBean{
 
     public static final class PassengerRequestBuilder implements IPassengerRequestBuilder{
 
-        private long id;
+        private long passengerRequestId;
         private String firstName;
         private String lastName;
         private String gender;
-        private BookingRecordRequest bookingRecordRequest;
 
-        public PassengerRequestBuilder withId(long id){
-            this.id = id;
+        public PassengerRequestBuilder withPassengerRequestId(long passengerRequestId){
+            this.passengerRequestId = passengerRequestId;
             return self();
         }
 
@@ -103,11 +97,6 @@ public class PassengerRequest extends AbstractModelBean{
 
         public PassengerRequestBuilder withGender(String gender){
             this.gender = gender;
-            return self();
-        }
-
-        public PassengerRequestBuilder withBookingRecordRequest(BookingRecordRequest bookingRecordRequest){
-            this.bookingRecordRequest = bookingRecordRequest;
             return self();
         }
 

@@ -1,4 +1,4 @@
-package com.drbotro.bk.coreserviceapi.data;
+package com.drbotro.bk.webapi.response.v2;
 
 import java.util.Collections;
 import java.util.Date;
@@ -13,10 +13,11 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+@SuppressWarnings("serial")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class BookingRecordRequest extends AbstractModelBean{
+public class BookingRecordWebResponse extends AbstractModelBean{
 
     private long id;
     private String flightNumber;
@@ -27,9 +28,9 @@ public class BookingRecordRequest extends AbstractModelBean{
     private String fare;
     private String status;
 
-    private List<PassengerRequest> passengersRequest;
+    private List<PassengerWebResponse> passengersWebResponse;
 
-    private BookingRecordRequest(BookingRecordRequestBuilder builder){
+    private BookingRecordWebResponse(BookingRecordWebResponseBuilder builder){
         this.id = builder.id;
         this.flightNumber = builder.flightNumber;
         this.origin = builder.origin;
@@ -38,7 +39,7 @@ public class BookingRecordRequest extends AbstractModelBean{
         this.bookingDate = builder.bookingDate;
         this.fare = builder.fare;
         this.status = builder.status;
-        this.passengersRequest = builder.passengersRequest;
+        this.passengersWebResponse = builder.passengersWebResponse;
     }
 
     public long getId(){
@@ -73,46 +74,46 @@ public class BookingRecordRequest extends AbstractModelBean{
         return status;
     }
 
-    public List<PassengerRequest> getPassengersRequest(){
-        return passengersRequest;
+    public List<PassengerWebResponse> getPassengersWebResponse(){
+        return passengersWebResponse;
     }
 
     @Override
     public boolean equals(Object other){
-        if(!(other instanceof BookingRecordRequest)){
+        if(!(other instanceof BookingRecordWebResponse)){
             return false;
         }
-        final BookingRecordRequest castOther = (BookingRecordRequest) other;
+        final BookingRecordWebResponse castOther = (BookingRecordWebResponse) other;
         return new EqualsBuilder().append(id, castOther.id).append(flightNumber, castOther.flightNumber)
                 .append(origin, castOther.origin).append(destination, castOther.destination)
                 .append(flightDate, castOther.flightDate).append(bookingDate, castOther.bookingDate)
                 .append(fare, castOther.fare).append(status, castOther.status)
-                .append(passengersRequest, castOther.passengersRequest).isEquals();
+                .append(passengersWebResponse, castOther.passengersWebResponse).isEquals();
     }
 
     @Override
     public int hashCode(){
         return new HashCodeBuilder().append(id).append(flightNumber).append(origin).append(destination)
-                .append(flightDate).append(bookingDate).append(fare).append(status).append(passengersRequest)
+                .append(flightDate).append(bookingDate).append(fare).append(status).append(passengersWebResponse)
                 .toHashCode();
     }
 
-    public static BookingRecordRequestBuilder builder(){
-        return new BookingRecordRequestBuilder();
+    public static BookingRecordWebResponseBuilder builder(){
+        return new BookingRecordWebResponseBuilder();
     }
 
-    public BookingRecordRequestBuilder cloneBuilder(){
-        return new BookingRecordRequestBuilder().withId(this.id).withFlightNumber(this.flightNumber)
+    public BookingRecordWebResponseBuilder cloneBuilder(){
+        return new BookingRecordWebResponseBuilder().withId(this.id).withFlightNumber(this.flightNumber)
                 .withOrigin(this.origin).withDestination(this.destination).withFlightDate(this.flightDate)
                 .withBookingDate(this.bookingDate).withFare(this.fare).withStatus(this.status)
-                .withPassengersRequest(this.passengersRequest);
+                .withPassengersWebResponse(this.passengersWebResponse);
     }
 
-    public interface IBookingRecordRequestBuilder{
-        BookingRecordRequest build();
+    public interface IBookingRecordWebResponseBuilder{
+        BookingRecordWebResponse build();
     }
 
-    public static final class BookingRecordRequestBuilder implements IBookingRecordRequestBuilder{
+    public static final class BookingRecordWebResponseBuilder implements IBookingRecordWebResponseBuilder{
 
         private long id;
         private String flightNumber;
@@ -122,62 +123,63 @@ public class BookingRecordRequest extends AbstractModelBean{
         private Date bookingDate;
         private String fare;
         private String status;
-        private List<PassengerRequest> passengersRequest = Collections.emptyList();
+        private List<PassengerWebResponse> passengersWebResponse = Collections.emptyList();
 
-        private BookingRecordRequestBuilder(){
+        private BookingRecordWebResponseBuilder(){
         }
 
-        public BookingRecordRequestBuilder withId(long id){
+        public BookingRecordWebResponseBuilder withId(long id){
             this.id = id;
             return self();
         }
 
-        public BookingRecordRequestBuilder withFlightNumber(String flightNumber){
+        public BookingRecordWebResponseBuilder withFlightNumber(String flightNumber){
             this.flightNumber = flightNumber;
             return self();
         }
 
-        public BookingRecordRequestBuilder withOrigin(String origin){
+        public BookingRecordWebResponseBuilder withOrigin(String origin){
             this.origin = origin;
             return self();
         }
 
-        public BookingRecordRequestBuilder withDestination(String destination){
+        public BookingRecordWebResponseBuilder withDestination(String destination){
             this.destination = destination;
             return self();
         }
 
-        public BookingRecordRequestBuilder withFlightDate(String flightDate){
+        public BookingRecordWebResponseBuilder withFlightDate(String flightDate){
             this.flightDate = flightDate;
             return self();
         }
 
-        public BookingRecordRequestBuilder withBookingDate(Date bookingDate){
+        public BookingRecordWebResponseBuilder withBookingDate(Date bookingDate){
             this.bookingDate = bookingDate;
             return self();
         }
 
-        public BookingRecordRequestBuilder withFare(String fare){
+        public BookingRecordWebResponseBuilder withFare(String fare){
             this.fare = fare;
             return self();
         }
 
-        public BookingRecordRequestBuilder withStatus(String status){
+        public BookingRecordWebResponseBuilder withStatus(String status){
             this.status = status;
             return self();
         }
 
-        public BookingRecordRequestBuilder withPassengersRequest(List<PassengerRequest> passengersRequest){
-            this.passengersRequest = passengersRequest;
+        public BookingRecordWebResponseBuilder withPassengersWebResponse(
+                List<PassengerWebResponse> passengersWebResponse){
+            this.passengersWebResponse = passengersWebResponse;
             return self();
         }
 
         @Override
-        public BookingRecordRequest build(){
-            return new BookingRecordRequest(this);
+        public BookingRecordWebResponse build(){
+            return new BookingRecordWebResponse(this);
         }
 
-        private BookingRecordRequestBuilder self(){
+        private BookingRecordWebResponseBuilder self(){
             return this;
         }
     }

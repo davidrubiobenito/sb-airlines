@@ -1,4 +1,4 @@
-package com.drbotro.bk.coreserviceapi.data;
+package com.drbotro.bk.coreserviceapi.data.response.v2;
 
 import java.util.List;
 
