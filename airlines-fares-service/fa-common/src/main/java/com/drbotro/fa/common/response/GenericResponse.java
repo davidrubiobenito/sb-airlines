@@ -3,13 +3,13 @@ package com.drbotro.fa.common.response;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
-import com.drbotro.fa.common.exception.ErrorException;
+import com.drbotro.fa.common.exception.ApiError;
 import com.drbotro.fa.common.model.AbstractModelBean;
 
 public abstract class GenericResponse extends AbstractModelBean{
 
     protected String status;
-    protected ErrorException error;
+    protected ApiError error;
 
     protected GenericResponse(){
     }
@@ -18,7 +18,7 @@ public abstract class GenericResponse extends AbstractModelBean{
         return status;
     }
 
-    public ErrorException getError(){
+    public ApiError getError(){
         return error;
     }
 
@@ -62,7 +62,7 @@ public abstract class GenericResponse extends AbstractModelBean{
             return thisObject();
         }
 
-        public B withError(ErrorException error){
+        public B withError(ApiError error){
             object.error = error;
             return thisObject();
         }

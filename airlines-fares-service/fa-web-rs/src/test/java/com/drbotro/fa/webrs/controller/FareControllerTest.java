@@ -30,6 +30,8 @@ import com.drbotro.fa.webrs.WebRSApplication;
 public class FareControllerTest{
 
     private static final String FARES_GET = "/fares/get";
+    private static final String FLIGHT_NUMBER = "BF100";
+    private static final String FLIGHT_DATE = "22-JAN-16";
 
     private MockMvc mockMvc;
 
@@ -42,13 +44,10 @@ public class FareControllerTest{
     }
 
     @Test
-    public void verifyFare() throws Exception{
+    public void whenGetFareWithFlightNumberAnfFlightDate_shouldReturn_OK() throws Exception{
         final String url = Version.V1 + FARES_GET;
-        final String flightNumber = "BF100";
-        final String flightDate = "22-JAN-16";
-
         mockMvc.perform(MockMvcRequestBuilders.get(url).contentType(MediaType.APPLICATION_JSON_VALUE)
-                .param("flightNumber", flightNumber).param("flightDate", flightDate)
+                .param("flightNumber", FLIGHT_NUMBER).param("flightDate", FLIGHT_DATE)
                 .accept(MediaType.APPLICATION_JSON_VALUE)).andExpect(status().isOk())
                 .andExpect(jsonPath("$.status").value("OK")).andExpect(jsonPath("$.data", hasSize(1))).andDo(print());
     }

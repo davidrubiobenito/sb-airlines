@@ -18,7 +18,7 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.web.client.RestTemplate;
 
-import com.drbotro.bk.common.exception.ErrorException;
+import com.drbotro.bk.common.exception.ApiError;
 import com.drbotro.bk.coreserviceapi.converter.BookingRecordIntoBookingRecordResponseConverter;
 import com.drbotro.bk.coreserviceapi.converter.BookingRecordRequestIntoBookingRecordConverter;
 import com.drbotro.bk.coreserviceapi.data.BookingStatus;
@@ -115,7 +115,7 @@ public class BookingServiceImplTest{
     }
 
     @Test
-    public void whenBookBookingRecordRequest_shouldReturn_BookingRecordResponseSaved() throws ErrorException{
+    public void whenBookBookingRecordRequest_shouldReturn_BookingRecordResponseSaved() throws ApiError{
         when(restTemplate.getForObject(FARE_URL + "/get?flightNumber=" + bookingRecordRequest.getFlightNumber()
                 + "&flightDate=" + bookingRecordRequest.getFlightDate(), FareWebResponse.class))
                         .thenReturn(fareWebResponse);

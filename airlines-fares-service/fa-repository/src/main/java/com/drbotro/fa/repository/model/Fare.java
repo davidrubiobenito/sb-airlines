@@ -1,4 +1,6 @@
-package com.drbotro.fa.coreserviceapi.model;
+package com.drbotro.fa.repository.model;
+
+import java.math.BigDecimal;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -16,8 +18,9 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+@SuppressWarnings("serial")
 @Entity
-@Table(name = "fare_fare")
+@Table(name = "fare")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -25,24 +28,27 @@ public class Fare extends AbstractModelBean{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
-    private long id;
+    @Column(name = "id_fare")
+    private Long idFare;
     @Column(name = "flight_number")
     private String flightNumber;
     @Column(name = "flight_date")
     private String flightDate;
     @Column(name = "fare")
-    private String fare;
+    private BigDecimal fare;
+    @Column(name = "currency")
+    private String currency;
 
     public Fare(FareBuilder builder){
-        this.id = builder.id;
+        this.idFare = builder.idFare;
         this.flightNumber = builder.flightNumber;
         this.flightDate = builder.flightDate;
         this.fare = builder.fare;
+        this.currency = builder.currency;
     }
 
-    public long getId(){
-        return id;
+    public Long getFareId(){
+        return idFare;
     }
 
     public String getFlightNumber(){
@@ -53,8 +59,12 @@ public class Fare extends AbstractModelBean{
         return flightDate;
     }
 
-    public String getFare(){
+    public BigDecimal getFare(){
         return fare;
+    }
+
+    public String getCurrency(){
+        return currency;
     }
 
     @Override
@@ -63,13 +73,15 @@ public class Fare extends AbstractModelBean{
             return false;
         }
         final Fare castOther = (Fare) other;
-        return new EqualsBuilder().append(id, castOther.id).append(flightNumber, castOther.flightNumber)
-                .append(flightDate, castOther.flightDate).append(fare, castOther.fare).isEquals();
+        return new EqualsBuilder().append(idFare, castOther.idFare).append(flightNumber, castOther.flightNumber)
+                .append(flightDate, castOther.flightDate).append(fare, castOther.fare)
+                .append(currency, castOther.currency).isEquals();
     }
 
     @Override
     public int hashCode(){
-        return new HashCodeBuilder().append(id).append(flightNumber).append(flightDate).append(fare).toHashCode();
+        return new HashCodeBuilder().append(idFare).append(flightNumber).append(flightDate).append(fare)
+                .append(currency).toHashCode();
     }
 
     public static FareBuilder builder(){
@@ -77,8 +89,8 @@ public class Fare extends AbstractModelBean{
     }
 
     public FareBuilder cloneBuilder(){
-        return new FareBuilder().withId(this.id).withFlightNumber(this.flightNumber).withFlightDate(this.flightDate)
-                .withFare(this.fare);
+        return new FareBuilder().withFareId(this.idFare).withFlightNumber(this.flightNumber)
+                .withFlightDate(this.flightDate).withFare(this.fare).withCurrency(this.currency);
     }
 
     public interface IFareBuilder{
@@ -87,13 +99,14 @@ public class Fare extends AbstractModelBean{
 
     public static class FareBuilder implements IFareBuilder{
 
-        private long id;
+        private Long idFare;
         private String flightNumber;
         private String flightDate;
-        private String fare;
+        private BigDecimal fare;
+        private String currency;
 
-        public FareBuilder withId(long id){
-            this.id = id;
+        public FareBuilder withFareId(Long idFare){
+            this.idFare = idFare;
             return self();
         }
 
@@ -107,8 +120,13 @@ public class Fare extends AbstractModelBean{
             return self();
         }
 
-        public FareBuilder withFare(String fare){
+        public FareBuilder withFare(BigDecimal fare){
             this.fare = fare;
+            return self();
+        }
+
+        public FareBuilder withCurrency(String currency){
+            this.currency = currency;
             return self();
         }
 

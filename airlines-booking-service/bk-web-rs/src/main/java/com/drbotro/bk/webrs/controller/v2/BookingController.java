@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.drbotro.bk.common.exception.ErrorException;
+import com.drbotro.bk.common.exception.ApiError;
 import com.drbotro.bk.coreserviceapi.inter.v2.IBookingService;
 import com.drbotro.bk.repository.model.v2.BookingRecordBookingV2;
 import com.drbotro.bk.webapi.converter.request.v2.BookingRecordWebRequestIntoBookingRecordRequestConverter;
@@ -65,7 +65,7 @@ public class BookingController{
 
     @PostMapping(path = "/create", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<GenericResponseBookingRecordWebResponse> addBooking(
-            @RequestBody BookingRecordWebRequest bookingRecordWebRequest) throws ErrorException{
+            @RequestBody BookingRecordWebRequest bookingRecordWebRequest) throws ApiError{
 
         BookingRecordWebResponse bookingWebResponse = bookingRecordWebResponseConverter.convert(
                 iBookingService.saveBookingRecord(bookingRecordRequestConverter.convert(bookingRecordWebRequest)));

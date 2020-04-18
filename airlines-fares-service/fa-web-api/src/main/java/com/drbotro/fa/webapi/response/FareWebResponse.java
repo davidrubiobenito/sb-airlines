@@ -1,25 +1,37 @@
 package com.drbotro.fa.webapi.response;
 
+import java.math.BigDecimal;
+
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 import com.drbotro.fa.common.model.AbstractModelBean;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@SuppressWarnings("serial")
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class FareWebResponse extends AbstractModelBean{
 
-    private long id;
+    private Long id;
     private String flightNumber;
     private String flightDate;
-    private String fare;
+    private BigDecimal fare;
+    private String currency;
 
     public FareWebResponse(FaresWebResponseBuilder builder){
         this.id = builder.id;
         this.flightNumber = builder.flightNumber;
         this.flightDate = builder.flightDate;
         this.fare = builder.fare;
+        this.currency = builder.currency;
     }
 
-    public long getId(){
+    public Long getId(){
         return id;
     }
 
@@ -31,8 +43,12 @@ public class FareWebResponse extends AbstractModelBean{
         return flightDate;
     }
 
-    public String getFare(){
+    public BigDecimal getFare(){
         return fare;
+    }
+
+    public String getCurrency(){
+        return currency;
     }
 
     @Override
@@ -42,12 +58,14 @@ public class FareWebResponse extends AbstractModelBean{
         }
         final FareWebResponse castOther = (FareWebResponse) other;
         return new EqualsBuilder().append(id, castOther.id).append(flightNumber, castOther.flightNumber)
-                .append(flightDate, castOther.flightDate).append(fare, castOther.fare).isEquals();
+                .append(flightDate, castOther.flightDate).append(fare, castOther.fare)
+                .append(currency, castOther.currency).isEquals();
     }
 
     @Override
     public int hashCode(){
-        return new HashCodeBuilder().append(id).append(flightNumber).append(flightDate).append(fare).toHashCode();
+        return new HashCodeBuilder().append(id).append(flightNumber).append(flightDate).append(fare).append(currency)
+                .toHashCode();
     }
 
     public static FaresWebResponseBuilder builder(){
@@ -56,7 +74,7 @@ public class FareWebResponse extends AbstractModelBean{
 
     public FaresWebResponseBuilder cloneBuilder(){
         return new FaresWebResponseBuilder().withId(this.id).withFlightNumber(this.flightNumber)
-                .withFlightDate(this.flightDate).withFare(this.fare);
+                .withFlightNumber(this.flightDate).withFare(this.fare).withCurrency(this.currency);
     }
 
     public interface IFaresWebResponseBuilder{
@@ -65,12 +83,13 @@ public class FareWebResponse extends AbstractModelBean{
 
     public static class FaresWebResponseBuilder implements IFaresWebResponseBuilder{
 
-        private long id;
+        private Long id;
         private String flightNumber;
         private String flightDate;
-        private String fare;
+        private BigDecimal fare;
+        private String currency;
 
-        public FaresWebResponseBuilder withId(long id){
+        public FaresWebResponseBuilder withId(Long id){
             this.id = id;
             return self();
         }
@@ -85,8 +104,13 @@ public class FareWebResponse extends AbstractModelBean{
             return self();
         }
 
-        public FaresWebResponseBuilder withFare(String fare){
+        public FaresWebResponseBuilder withFare(BigDecimal fare){
             this.fare = fare;
+            return self();
+        }
+
+        public FaresWebResponseBuilder withCurrency(String currency){
+            this.currency = currency;
             return self();
         }
 

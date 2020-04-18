@@ -10,21 +10,21 @@ import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 
-public class ErrorExceptionTest{
+public class ApiErrorTest{
 
     public static final int CODE = 404;
     public static final String NOT_FOUND = "Not found";
     public static final int OTHER_CODE = 500;
     public static final String SERVER_INTERNAL_ERROR = "Server internal error";
-    private ErrorException entityA1;
-    private ErrorException entityA2;
-    private ErrorException entityB;
+    private ApiError entityA1;
+    private ApiError entityA2;
+    private ApiError entityB;
 
     @Before
     public void initEntities(){
-        entityA1 = ErrorException.builder().withError(CODE).withDescription(NOT_FOUND).build();
-        entityA2 = ErrorException.builder().withError(CODE).withDescription(NOT_FOUND).build();
-        entityB = ErrorException.builder().withError(OTHER_CODE).withDescription(SERVER_INTERNAL_ERROR).build();
+        entityA1 = ApiError.builder().withError(CODE).withDescription(NOT_FOUND).build();
+        entityA2 = ApiError.builder().withError(CODE).withDescription(NOT_FOUND).build();
+        entityB = ApiError.builder().withError(OTHER_CODE).withDescription(SERVER_INTERNAL_ERROR).build();
     }
 
     @Test

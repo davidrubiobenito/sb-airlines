@@ -19,10 +19,5 @@
 			<artifactId>fa-common</artifactId>
 			<version>${revision}</version>
 		</dependency>
-		<dependency>
-			<groupId>com.drbotro.sb-airlines</groupId>
-			<artifactId>fa-coreservice-api</artifactId>
-			<version>${revision}</version>
-		</dependency>
 	</dependencies>
 </project>

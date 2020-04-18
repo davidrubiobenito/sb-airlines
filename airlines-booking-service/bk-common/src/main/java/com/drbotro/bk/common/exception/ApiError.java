@@ -1,18 +1,16 @@
-package com.drbotro.fa.common.exception;
+package com.drbotro.bk.common.exception;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
-import com.drbotro.fa.common.response.DataResponse;
-
-public class ErrorException extends Exception{
+public class ApiError extends Exception{
 
     private static final long serialVersionUID = 5767551160120356470L;
 
     private Integer code;
 
-    public ErrorException(ErrorResponseBuilder builder){
+    public ApiError(ErrorResponseBuilder builder){
         super(builder.description);
         this.code = builder.code;
     }
@@ -23,10 +21,10 @@ public class ErrorException extends Exception{
 
     @Override
     public boolean equals(Object other){
-        if(!(other instanceof DataResponse)){
+        if(!(other instanceof ApiError)){
             return false;
         }
-        final ErrorException castOther = (ErrorException) other;
+        final ApiError castOther = (ApiError) other;
         return new EqualsBuilder().appendSuper(super.equals(other)).append(code, castOther.code).isEquals();
     }
 
@@ -49,7 +47,7 @@ public class ErrorException extends Exception{
     }
 
     public interface IErrorResponse{
-        ErrorException build();
+        ApiError build();
     }
 
     public static class ErrorResponseBuilder implements IErrorResponse{
@@ -68,8 +66,8 @@ public class ErrorException extends Exception{
         }
 
         @Override
-        public ErrorException build(){
-            return new ErrorException(this);
+        public ApiError build(){
+            return new ApiError(this);
         }
 
         public ErrorResponseBuilder self(){

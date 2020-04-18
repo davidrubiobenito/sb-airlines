@@ -11,7 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-import com.drbotro.bk.common.exception.ErrorException;
+import com.drbotro.bk.common.exception.ApiError;
 import com.drbotro.bk.coreserviceapi.converter.v2.BookingRecordIntoBookingRecordResponseConverter;
 import com.drbotro.bk.coreserviceapi.converter.v2.BookingRecordRequestIntoBookingRecordConverter;
 import com.drbotro.bk.coreserviceapi.data.BookingStatus;
@@ -48,7 +48,7 @@ public class BookingServiceImpl implements IBookingService{
     private BookingRecordIntoBookingRecordResponseConverter bookingRecordResponseConverter;
 
     @Override
-    public BookingRecordResponse saveBookingRecord(BookingRecordRequest bookingRecordRequest) throws ErrorException{
+    public BookingRecordResponse saveBookingRecord(BookingRecordRequest bookingRecordRequest) throws ApiError{
 
         logger.info("calling fares to get fare");
         //call fares to get fare
@@ -69,7 +69,7 @@ public class BookingServiceImpl implements IBookingService{
 
         //check fare
         if(!bookingRecordRequest.getFare().equals(fareWebResponse.getFare()))
-            throw ErrorException.builder().withError(204).withDescription("fare is tampered").build();
+            throw ApiError.builder().withError(204).withDescription("fare is tampered").build();
 
         //check inventory
         Optional<InventoryBookingV2> inventoryOptional = iInventoryRepository.findByFlightNumberAndFlightDate(
@@ -77,7 +77,7 @@ public class BookingServiceImpl implements IBookingService{
 
         if(inventoryOptional.isPresent()){
             if(!inventoryOptional.get().isAvailable(bookingRecordRequest.getPassengersRequest().size())){
-                throw ErrorException.builder().withError(204).withDescription("No more seats avaialble").build();
+                throw ApiError.builder().withError(204).withDescription("No more seats avaialble").build();
             }else{
                 logger.info("successfully checked inventory: {}", inventoryOptional.get());
                 logger.info("calling inventory to update inventory");
