@@ -9,7 +9,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.drbotro.fa.common.exception.EntityConflictException;
+import com.drbotro.fa.common.exception.EntityFareConflictException;
+import com.drbotro.fa.common.exception.EntityFareNotFoundException;
 import com.drbotro.fa.coreserviceapi.data.converter.request.FareRequestIntoFareConverter;
 import com.drbotro.fa.coreserviceapi.data.converter.response.FareIntoFareResponseConverter;
 import com.drbotro.fa.coreserviceapi.data.request.FareRequest;
@@ -32,10 +33,9 @@ public class FareServiceImpl implements IFareService{
     private IFareRepository iFareRepository;
 
     @Override
-    public FareResponse getFare(String flightNumber, String flightDate){
-        logger.info("Looking for fares flightNumber: {}, flightDate: {} ", flightNumber, flightDate);
+    public FareResponse findFareByFlightNumberAndFlightDate(final String flightNumber, final String flightDate){
         Fare fare = null;
-        Optional<Fare> optional = iFareRepository.getFareByFlightNumberAndFlightDate(flightNumber, flightDate);
+        Optional<Fare> optional = findFare(flightNumber.trim(), flightDate.trim());
         if(optional.isPresent()){
             fare = optional.get();
         }
@@ -43,19 +43,35 @@ public class FareServiceImpl implements IFareService{
     }
 
     @Override
-    public List<FareResponse> getAllFare(){
+    public List<FareResponse> findAllFare(){
         return iFareRepository.findAll().stream().map(f -> fareResponseConverter.convert(f))
                 .collect(Collectors.toList());
     }
 
     @Override
-    public FareResponse createFare(FareRequest fareRequest) throws EntityConflictException{
-        Optional<Fare> fareOptional = iFareRepository.getFareByFlightNumberAndFlightDate(
-                fareRequest.getFlightNumber().trim(), fareRequest.getFlightDate().trim());
+    public FareResponse saveFare(final FareRequest fareRequest) throws EntityFareConflictException{
+        Optional<Fare> fareOptional = findFare(fareRequest.getFlightNumber().trim(),
+                fareRequest.getFlightDate().trim());
         if(fareOptional.isPresent()){
-            throw new EntityConflictException("El registro existe en BBDD");
+            throw new EntityFareConflictException("El registro existe en BBDD");
         }
         return fareResponseConverter.convert(iFareRepository.save(fareConverter.convert(fareRequest)));
+    }
+
+    @Override
+    public FareResponse updateFare(final FareRequest fareRequest) throws EntityFareNotFoundException{
+        Optional<Fare> fareOptional = findFare(fareRequest.getFlightNumber().trim(),
+                fareRequest.getFlightDate().trim());
+        if(!fareOptional.isPresent()){
+            throw new EntityFareNotFoundException("El registro No existe en BBDD");
+        }
+
+        return fareResponseConverter.convert(iFareRepository.save(fareOptional.get().cloneBuilder()
+                .withFare(fareRequest.getFare()).withCurrency(fareRequest.getCurrency()).build()));
+    }
+
+    private Optional<Fare> findFare(final String flightNumber, final String flightDate){
+        return iFareRepository.findFareByFlightNumberAndFlightDate(flightNumber, flightDate);
     }
 
 }

@@ -2,7 +2,9 @@ package com.drbotro.fa.webapi.request;
 
 import java.math.BigDecimal;
 
+import javax.validation.constraints.DecimalMin;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
@@ -20,12 +22,16 @@ import lombok.NoArgsConstructor;
 public class FareWebRequest extends AbstractModelBean{
 
     @NotNull(message = "Flight Number cannot be missing or empty")
+    @Size(min = 5, max = 5, message = "Flight Number have 5 characters")
     private String flightNumber;
     @NotNull(message = "Flight Date cannot be missing or empty")
+    @Size(min = 9, max = 9, message = "Flight Date have 9 characters")
     private String flightDate;
     @NotNull(message = "Fare Number cannot be missing or empty")
+    @DecimalMin("0.00")
     private BigDecimal fare;
     @NotNull(message = "Currency")
+    @Size(min = 3, max = 3, message = "Currency have 3 characters")
     private String currency;
 
     public FareWebRequest(FareWebRequestBuilder builder){

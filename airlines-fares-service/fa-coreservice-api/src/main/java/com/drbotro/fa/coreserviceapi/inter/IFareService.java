@@ -2,14 +2,19 @@ package com.drbotro.fa.coreserviceapi.inter;
 
 import java.util.List;
 
-import com.drbotro.fa.common.exception.EntityConflictException;
+import com.drbotro.fa.common.exception.EntityFareConflictException;
+import com.drbotro.fa.common.exception.EntityFareNotFoundException;
 import com.drbotro.fa.coreserviceapi.data.request.FareRequest;
 import com.drbotro.fa.coreserviceapi.data.response.FareResponse;
 
 public interface IFareService{
-    List<FareResponse> getAllFare();
 
-    FareResponse getFare(String flightNumber, String flightDate);
+    FareResponse saveFare(final FareRequest fareRequest) throws EntityFareConflictException;
 
-    FareResponse createFare(FareRequest fareRequest) throws EntityConflictException;
+    List<FareResponse> findAllFare();
+
+    FareResponse findFareByFlightNumberAndFlightDate(final String flightNumber, final String flightDate);
+
+    FareResponse updateFare(final FareRequest fareRequest) throws EntityFareNotFoundException;
+
 }
