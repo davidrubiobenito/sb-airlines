@@ -1,6 +1,7 @@
 package com.drbotro.fa.webrs.security.jwt;
 
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.Date;
 
 import javax.servlet.FilterChain;
@@ -9,12 +10,14 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
+import com.drbotro.fa.webapi.response.GenericResponseTokenWebResponse;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import io.jsonwebtoken.Jwts;
@@ -64,7 +67,17 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
  
         // @formatter:on
 
+        final GenericResponseTokenWebResponse genericResponseTokenWebResponse = GenericResponseTokenWebResponse
+                .builder().withStatus("OK").withError(null)
+                .withData(Arrays.asList(SecurityConstants.TOKEN_PREFIX + token)).build();
+
         response.addHeader(SecurityConstants.TOKEN_HEADER, SecurityConstants.TOKEN_PREFIX + token);
+        response.setContentType(MediaType.APPLICATION_JSON_VALUE);
+        response.setStatus(HttpServletResponse.SC_OK);
+
+        final ObjectMapper mapper = new ObjectMapper();
+        mapper.writeValue(response.getOutputStream(), genericResponseTokenWebResponse);
+
     }
 
 }

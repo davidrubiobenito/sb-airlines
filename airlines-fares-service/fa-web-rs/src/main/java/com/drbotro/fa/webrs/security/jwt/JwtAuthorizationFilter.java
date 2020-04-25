@@ -14,20 +14,18 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.OncePerRequestFilter;
 
+import com.drbotro.fa.common.exception.AuthorizationTokenException;
 import com.google.common.base.Strings;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jws;
-import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.MalformedJwtException;
 import io.jsonwebtoken.UnsupportedJwtException;
@@ -37,12 +35,14 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter{
 
     private static final Logger logger = LoggerFactory.getLogger(JwtAuthorizationFilter.class);
 
+    /*
     private final AuthenticationManager authenticationManager;
-
+    
     @Autowired
     public JwtAuthorizationFilter(AuthenticationManager authenticationManager){
         this.authenticationManager = authenticationManager;
     }
+    */
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
@@ -79,8 +79,8 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter{
 
             SecurityContextHolder.getContext().setAuthentication(authentication);
 
-        }catch(JwtException e){
-            throw new IllegalStateException(String.format("Token %s cannot be trusted", token));
+        }catch(RuntimeException exception){
+            throw new AuthorizationTokenException(exception.getMessage());
         }
 
         filterChain.doFilter(request, response);
@@ -113,16 +113,20 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter{
                 }
 
             }catch(ExpiredJwtException exception){
-                logger.warn("Request to parse expired JWT : {} failed : {}", token, exception.getMessage());
+                throw new IllegalArgumentException(
+                        String.format("Request to parse expired JWT failed : %s", exception.getMessage()));
             }catch(UnsupportedJwtException exception){
-                logger.warn("Request to parse unsupported JWT : {} failed : {}", token, exception.getMessage());
+                throw new IllegalArgumentException(
+                        String.format("Request to parse unsupported JWT failed : %s", exception.getMessage()));
             }catch(MalformedJwtException exception){
-                logger.warn("Request to parse invalid JWT : {} failed : {}", token, exception.getMessage());
+                throw new IllegalArgumentException(
+                        String.format("Request to parse invalid JWT failed : %s", exception.getMessage()));
             }catch(SignatureException exception){
-                logger.warn("Request to parse JWT with invalid signature : {} failed : {}", token,
-                        exception.getMessage());
+                throw new IllegalArgumentException(
+                        String.format("Request to parse JWT with invalid signature : %s", exception.getMessage()));
             }catch(IllegalArgumentException exception){
-                logger.warn("Request to parse empty or null JWT : {} failed : {}", token, exception.getMessage());
+                throw new IllegalArgumentException(
+                        String.format("Request to parse empty or null JWT : %s", exception.getMessage()));
             }
         }
 

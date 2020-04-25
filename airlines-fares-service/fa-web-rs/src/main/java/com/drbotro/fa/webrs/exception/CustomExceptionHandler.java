@@ -7,6 +7,7 @@ import java.util.stream.Collectors;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -15,6 +16,8 @@ import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 import com.drbotro.fa.common.exception.ApiError;
+import com.drbotro.fa.common.exception.AuthorizationTokenException;
+import com.drbotro.fa.common.exception.CustomUsernameNotFoundException;
 import com.drbotro.fa.common.exception.EntityFareConflictException;
 import com.drbotro.fa.common.exception.EntityFareNotFoundException;
 import com.drbotro.fa.webapi.response.GenericResponseFareWebResponse;
@@ -35,7 +38,7 @@ public class CustomExceptionHandler extends ResponseEntityExceptionHandler{
     }
 
     @ExceptionHandler(EntityFareConflictException.class)
-    public final ResponseEntity<GenericResponseFareWebResponse> handleEntityConflictException(
+    public final ResponseEntity<GenericResponseFareWebResponse> handleEntityFareConflictException(
             EntityFareConflictException ex, WebRequest request){
 
         return new ResponseEntity(GenericResponseFareWebResponse.builder()
@@ -46,7 +49,7 @@ public class CustomExceptionHandler extends ResponseEntityExceptionHandler{
     }
 
     @ExceptionHandler(EntityFareNotFoundException.class)
-    public final ResponseEntity<GenericResponseFareWebResponse> handleEntityNotFoundException(
+    public final ResponseEntity<GenericResponseFareWebResponse> handleEntityFareNotFoundException(
             EntityFareNotFoundException ex, WebRequest request){
 
         return new ResponseEntity(GenericResponseFareWebResponse.builder()
@@ -54,6 +57,37 @@ public class CustomExceptionHandler extends ResponseEntityExceptionHandler{
                         .withDescription("Record Not Exists into BBDD")
                         .withDetails(Arrays.asList(ex.getLocalizedMessage())).build())
                 .withStatus(ERROR).withData(null).build(), HttpStatus.NO_CONTENT);
+    }
+
+    @ExceptionHandler(CustomUsernameNotFoundException.class)
+    public final ResponseEntity<GenericResponseFareWebResponse> handleUsernameNotFoundException(
+            CustomUsernameNotFoundException ex, WebRequest request){
+
+        return new ResponseEntity(GenericResponseFareWebResponse.builder()
+                .withError(ApiError.builder().withCode(HttpStatus.NO_CONTENT.value())
+                        .withDescription("Username Not Exists into BBDD")
+                        .withDetails(Arrays.asList(ex.getLocalizedMessage())).build())
+                .withStatus(ERROR).withData(null).build(), HttpStatus.NO_CONTENT);
+    }
+
+    @ExceptionHandler(AuthorizationTokenException.class)
+    public final ResponseEntity<GenericResponseFareWebResponse> handleAuthorizationTokenException(
+            AuthorizationTokenException ex, WebRequest request){
+
+        return new ResponseEntity(GenericResponseFareWebResponse.builder()
+                .withError(ApiError.builder().withCode(HttpStatus.FORBIDDEN.value()).withDescription("Token invalid")
+                        .withDetails(Arrays.asList(ex.getLocalizedMessage())).build())
+                .withStatus(ERROR).withData(null).build(), HttpStatus.FORBIDDEN);
+    }
+
+    @ExceptionHandler(AccessDeniedException.class)
+    public final ResponseEntity<GenericResponseFareWebResponse> handleAccessDeniedException(AccessDeniedException ex,
+            WebRequest request){
+
+        return new ResponseEntity(GenericResponseFareWebResponse.builder()
+                .withError(ApiError.builder().withCode(HttpStatus.UNAUTHORIZED.value()).withDescription("Unauthorised")
+                        .withDetails(Arrays.asList(ex.getLocalizedMessage())).build())
+                .withStatus(ERROR).withData(null).build(), HttpStatus.UNAUTHORIZED);
     }
 
     @Override

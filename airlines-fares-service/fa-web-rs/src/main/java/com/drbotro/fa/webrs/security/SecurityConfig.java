@@ -5,6 +5,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
@@ -15,20 +16,28 @@ import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import com.drbotro.fa.coreservice.CustomUserDetailsService;
+import com.drbotro.fa.webrs.exception.RestAccessDeniedHandler;
+import com.drbotro.fa.webrs.exception.RestAuthenticationEntryPoint;
 import com.drbotro.fa.webrs.security.jwt.JwtAuthenticationFilter;
 import com.drbotro.fa.webrs.security.jwt.JwtAuthorizationFilter;
 
 @Configuration
 @EnableWebSecurity
+@EnableGlobalMethodSecurity(prePostEnabled = true)
 public class SecurityConfig extends WebSecurityConfigurerAdapter{
 
     private PasswordEncoder passwordEncoder;
     private CustomUserDetailsService customUserDetailsService;
+    private RestAccessDeniedHandler accessDeniedHandler;
+    private RestAuthenticationEntryPoint authenticationEntryPoint;
 
     @Autowired
-    public SecurityConfig(PasswordEncoder passwordEncoder, CustomUserDetailsService customUserDetailsService){
+    public SecurityConfig(PasswordEncoder passwordEncoder, CustomUserDetailsService customUserDetailsService,
+            RestAccessDeniedHandler accessDeniedHandler, RestAuthenticationEntryPoint authenticationEntryPoint){
         this.passwordEncoder = passwordEncoder;
         this.customUserDetailsService = customUserDetailsService;
+        this.accessDeniedHandler = accessDeniedHandler;
+        this.authenticationEntryPoint = authenticationEntryPoint;
     }
 
     @Override
@@ -39,11 +48,16 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
             .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
             .and()
             .addFilter(new JwtAuthenticationFilter(authenticationManager()))
-            .addFilterAfter(new JwtAuthorizationFilter(authenticationManager()), JwtAuthenticationFilter.class)
+//            .addFilterAfter(new JwtAuthorizationFilter(authenticationManager()), JwtAuthenticationFilter.class)
+            .addFilterAfter(new JwtAuthorizationFilter(), JwtAuthenticationFilter.class)
             .authorizeRequests()
                 .antMatchers("/", "/js/**", "/css/**", "/images/**").permitAll()
                 .antMatchers("/**/get").permitAll()
-                .anyRequest().authenticated();    
+                .anyRequest().authenticated()
+            .and()              
+            .exceptionHandling()
+            .accessDeniedHandler(accessDeniedHandler)
+            .authenticationEntryPoint(authenticationEntryPoint);
         // @formatter:on
 
     }

@@ -21,7 +21,7 @@ public class ApiError extends AbstractModelBean{
     private String description;
     private List<String> details;
 
-    public ApiError(ApiErrorBuilder builder){
+    private ApiError(ApiErrorBuilder builder){
         this.code = builder.code;
         this.description = builder.description;
         this.details = builder.details;

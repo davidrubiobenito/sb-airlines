@@ -9,9 +9,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import com.drbotro.fa.common.exception.CustomUsernameNotFoundException;
 import com.drbotro.fa.repository.dao.IRoleFareRepository;
 import com.drbotro.fa.repository.dao.IUserFareRepository;
 import com.drbotro.fa.repository.model.PermissionFare;
@@ -39,8 +39,8 @@ public class CustomUserDetailsService implements UserDetailsService{
 
         ListIterator<Object[]> iter = iUserFareRepository.findByUsername(username).listIterator();
 
-        if(iter == null){
-            throw new UsernameNotFoundException(username);
+        if(!iter.hasNext()){
+            throw new CustomUsernameNotFoundException("User not found BBDD");
         }
 
         while(iter.hasNext()){
@@ -78,39 +78,46 @@ public class CustomUserDetailsService implements UserDetailsService{
         Set<RoleFare> roleFareAux = Sets.newHashSet();
         Set<UserFare> userFareAux = Sets.newHashSet();
 
-        ListIterator<Object[]> iter = iUserFareRepository.findByUsername(username).listIterator();
+        try{
 
-        while(iter.hasNext()){
+            ListIterator<Object[]> iter = iUserFareRepository.findByUsername(username).listIterator();
 
-            Object[] item = iter.next(); // fetch the object
+            if(!iter.hasNext()){
+                throw new CustomUsernameNotFoundException("User not found BBDD");
+            }
 
-            permissionFareAux.add(PermissionFare.builder().withPermissionFareIdId((Long) item[9])
-                    .withPermissionName((String) item[10]).build());
+            while(iter.hasNext()){
 
-            roleFareAux.add(RoleFare.builder().withRoleId((Long) item[7]).withRoleName((String) item[8]).build());
+                Object[] item = iter.next(); // fetch the object
 
-            userFareAux.add(UserFare.builder().withUserFareId((Long) item[0]).withUsername((String) item[1])
-                    .withPassword((String) item[2]).withIsAccountNonExpired((boolean) item[3])
-                    .withIsAccountNonLocked((boolean) item[4]).withIsCredentialsNonExpired((boolean) item[5])
-                    .withIsEnabled((boolean) item[6]).build());
+                permissionFareAux.add(PermissionFare.builder().withPermissionFareIdId((Long) item[9])
+                        .withPermissionName((String) item[10]).build());
+
+                roleFareAux.add(RoleFare.builder().withRoleId((Long) item[7]).withRoleName((String) item[8]).build());
+
+                userFareAux.add(UserFare.builder().withUserFareId((Long) item[0]).withUsername((String) item[1])
+                        .withPassword((String) item[2]).withIsAccountNonExpired((boolean) item[3])
+                        .withIsAccountNonLocked((boolean) item[4]).withIsCredentialsNonExpired((boolean) item[5])
+                        .withIsEnabled((boolean) item[6]).build());
+            }
+
+            roleFareAux = roleFareAux.stream().map(r -> r.cloneBuilder().withPermission(permissionFareAux).build())
+                    .collect(Collectors.toSet());
+
+            UserFare userFare = null;
+
+            for(UserFare user : userFareAux){
+                userFare = user.cloneBuilder().withRoles(roleFareAux).build();
+            }
+
+            logger.info("User:  {} ", userFare);
+
+            return userFare;
+
+        }catch(CustomUsernameNotFoundException ae){
+            throw new CustomUsernameNotFoundException("User not found BBDD");
         }
 
-        roleFareAux = roleFareAux.stream().map(r -> r.cloneBuilder().withPermission(permissionFareAux).build())
-                .collect(Collectors.toSet());
-
-        UserFare userFare = null;
-
-        for(UserFare user : userFareAux){
-            userFare = user.cloneBuilder().withRoles(roleFareAux).build();
-        }
-
-        logger.info("User:  {} ", userFare);
-
-        return userFare;
-    }
-
-    public RoleFare getRolePorId(Long id){
-        return iRoleFareRepository.getPorId(id);
     }
 
 }

@@ -57,7 +57,7 @@ public class FareManagementController{
     }
 
     @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    @PreAuthorize("hasAuthority('fare:write')")
+    @PreAuthorize("hasAuthority('FARE_WRITE')")
     public ResponseEntity<GenericResponseFareWebResponse> createFare(@Valid
     @RequestBody
     final FareWebRequest fareWebRequest) throws EntityFareConflictException{
@@ -68,7 +68,7 @@ public class FareManagementController{
     }
 
     @PutMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    @PreAuthorize("hasAuthority('fare:write')")
+    @PreAuthorize("hasAuthority('FARE_WRITE')")
     public ResponseEntity<GenericResponseFareWebResponse> updateFare(@Valid
     @RequestBody
     final FareWebRequest fareWebRequest) throws EntityFareNotFoundException{
