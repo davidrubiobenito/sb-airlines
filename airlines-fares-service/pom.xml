@@ -20,7 +20,7 @@
 		<java.version>1.8</java.version>
 		<lombok.version>1.18.12</lombok.version>
 		<mariadb-java-client.version>2.6.0</mariadb-java-client.version>
-		<mysql.version>8.0.19</mysql.version>
+		<mysql.version>8.0.28</mysql.version>
 		<maven.compiler.source>${java.version}</maven.compiler.source>
 		<maven.compiler.target>${java.version}</maven.compiler.target>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
